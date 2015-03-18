@@ -64,7 +64,9 @@ impl<E: CLike> hash::Hash for EnumSet<E> {
 /// implementation can be seen below:
 ///
 /// ```{rust}
-/// # use enum_set::CLike;
+/// # extern crate "enum-set" as enum_set;
+/// # fn main() {
+/// use enum_set::CLike;
 /// use std::mem;
 ///
 /// #[derive(Copy)]
@@ -81,6 +83,7 @@ impl<E: CLike> hash::Hash for EnumSet<E> {
 ///         mem::transmute(v)
 ///     }
 /// }
+/// # }
 /// ```
 pub trait CLike {
     /// Converts a C-like enum to a `u32`.
