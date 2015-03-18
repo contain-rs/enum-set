@@ -1,0 +1,15 @@
+[package]
+
+name = "enum-set"
+version = "0.0.1"
+license = "MIT/Apache-2.0"
+description = "A structure for holding a set of enum variants"
+authors = [
+    "Stepan Koltsov <stepan.koltsov@gmail.com>",
+]
+
+repository = "https://github.com/contain-rs/enum-set"
+homepage = "https://github.com/contain-rs/enum-set"
+documentation = "https://contain-rs.github.io/enum-set/enum-set"
+keywords = ["data-structures"]
+readme = "README.md"
