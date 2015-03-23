@@ -294,8 +294,8 @@ mod tests {
             *self as u32
         }
 
-        fn from_u32(v: u32) -> Foo {
-            unsafe { mem::transmute(v) }
+        unsafe fn from_u32(v: u32) -> Foo {
+            mem::transmute(v)
         }
     }
 
