@@ -9,7 +9,7 @@
 
     <title>lib.rs.html -- source</title>
 
-    <link rel="stylesheet" type="text/css" href="../../../main.css">
+    <link rel="stylesheet" type="text/css" href="../../main.css">
 
     
     
@@ -848,8 +848,8 @@
             <span class='op'>*</span><span class='self'>self</span> <span class='kw'>as</span> <span class='ident'>u32</span>
         }
 
-        <span class='kw'>fn</span> <span class='ident'>from_u32</span>(<span class='ident'>v</span>: <span class='ident'>u32</span>) <span class='op'>-&gt;</span> <span class='ident'>Foo</span> {
-            <span class='kw'>unsafe</span> { <span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='ident'>v</span>) }
+        <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>from_u32</span>(<span class='ident'>v</span>: <span class='ident'>u32</span>) <span class='op'>-&gt;</span> <span class='ident'>Foo</span> {
+            <span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='ident'>v</span>)
         }
     }
 
@@ -1103,13 +1103,13 @@
     
 
     <script>
-        window.rootPath = "../../../";
+        window.rootPath = "../../";
         window.currentCrate = "enum-set";
         window.playgroundUrl = "";
     </script>
-    <script src="../../../jquery.js"></script>
-    <script src="../../../main.js"></script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
     
-    <script async src="../../../search-index.js"></script>
+    <script async src="../../search-index.js"></script>
 </body>
 </html>
