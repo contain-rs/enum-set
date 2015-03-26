@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API stability overview for the Rust `enum-set` crate.">
-    <meta name="keywords" content="rust, rustlang, rust-lang">
+    <meta name="description" content="API documentation for the Rust `enum_set` crate.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, enum_set">
 
-    <title>enum-set - Stability dashboard</title>
+    <title>enum_set - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../main.css">
 
@@ -26,7 +26,7 @@
 
     <section class="sidebar">
         
-        <p class='location'></p><script>window.sidebarCurrent = {name: 'enum-set', ty: 'mod', relpath: '../'};</script>
+        <p class='location'></p><script>window.sidebarCurrent = {name: 'enum_set', ty: 'mod', relpath: '../'};</script>
     </section>
 
     <nav class="sub">
@@ -40,18 +40,39 @@
         </form>
     </nav>
 
-    <section id='main' class="content mod"><h1 class='fqn'>Stability dashboard: crate <a class='mod' href='index.html'>enum-set</a></h1>
-This dashboard summarizes the stability levels for all of the public modules of
-the crate, according to the total number of items at each level in the module and
-its children (percentages total for enum-set):
-<blockquote>
-<a class='stability Stable'></a> stable (42%),<br/>
-<a class='stability Unstable'></a> unstable (0%),<br/>
-<a class='stability Deprecated'></a> deprecated (0%),<br/>
-<a class='stability Unmarked'></a> unmarked (57%)
-</blockquote>
-The counts do not include methods or trait
-implementations that are visible only through a re-exported type.<table><tr><td><a href='index.html'>enum-set</a></td><td class='summary-column'><span class='summary Stable' style='width: 42.8571%; display: inline-block'>&nbsp</span><span class='summary Unstable' style='width: 0.0000%; display: inline-block'>&nbsp</span><span class='summary Deprecated' style='width: 0.0000%; display: inline-block'>&nbsp</span><span class='summary Unmarked' style='width: 57.1429%; display: inline-block'>&nbsp</span></td></tr></table></section>
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>enum_set</a><wbr></span><span class='out-of-band'><a href='stability.html'>[stability]</a> <span id='render-detail'>
+            <a id="collapse-all" href="#">[-]</a>&nbsp;<a id="expand-all" href="#">[+]</a>
+        </span><a id='src-0' href='../src/enum_set/lib.rs.html#11-511'>[src]</a></span></h1>
+<div class='docblock'><p>A structure for holding a set of enum variants.</p>
+
+<p>This module defines a container which uses an efficient bit mask
+representation to hold C-like enum variants.</p>
+</div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='struct' href='struct.EnumSet.html'
+                               title='enum_set::EnumSet'>EnumSet</a></td>
+                        <td class='docblock short'><p>A specialized set implementation to use enum types.</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='struct' href='struct.Iter.html'
+                               title='enum_set::Iter'>Iter</a></td>
+                        <td class='docblock short'><p>An iterator over an EnumSet</p>
+</td>
+                    </tr>
+                </table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
+<table>
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='trait' href='trait.CLike.html'
+                               title='enum_set::CLike'>CLike</a></td>
+                        <td class='docblock short'><p>An interface for casting C-like enum to u32 and back. A typical
+implementation can be seen below:</p>
+</td>
+                    </tr>
+                </table></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
@@ -91,7 +112,7 @@ implementations that are visible only through a re-exported type.<table><tr><td>
 
     <script>
         window.rootPath = "../";
-        window.currentCrate = "enum-set";
+        window.currentCrate = "enum_set";
         window.playgroundUrl = "";
     </script>
     <script src="../jquery.js"></script>
