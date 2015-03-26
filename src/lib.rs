@@ -63,8 +63,8 @@ impl<E: CLike> hash::Hash for EnumSet<E> {
 /// An interface for casting C-like enum to u32 and back. A typical
 /// implementation can be seen below:
 ///
-/// ```{rust}
-/// # extern crate "enum-set" as enum_set;
+/// ```
+/// # extern crate enum_set;
 /// # fn main() {
 /// use enum_set::CLike;
 /// use std::mem;
