@@ -95,7 +95,7 @@ pub trait CLike {
 
 fn bit<E:CLike>(e: &E) -> u32 {
     let value = e.to_u32();
-    assert!(value < u32::BITS as u32,
+    assert!(value < u32::BITS,
             "EnumSet only supports up to {} variants.", u32::BITS - 1);
     1 << value
 }
