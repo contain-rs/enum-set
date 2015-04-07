@@ -23,7 +23,6 @@
 use std::fmt;
 use std::hash;
 use std::marker::PhantomData;
-use std::num::Int;
 use std::u32;
 use std::iter::{self, IntoIterator};
 use std::ops;
@@ -67,7 +66,7 @@ impl<E: CLike> hash::Hash for EnumSet<E> {
 /// use enum_set::CLike;
 /// use std::mem;
 ///
-/// #[derive(Copy)]
+/// #[derive(Clone, Copy)]
 /// #[repr(u32)]
 /// enum Foo {
 ///     A, B, C
@@ -278,13 +277,11 @@ mod tests {
 
     use super::{EnumSet, CLike};
 
-    #[derive(PartialEq, Debug)]
+    #[derive(Copy, Clone, PartialEq, Debug)]
     #[repr(u32)]
     enum Foo {
         A, B, C
     }
-
-    impl Copy for Foo {}
 
     impl CLike for Foo {
         fn to_u32(&self) -> u32 {
@@ -485,14 +482,13 @@ mod tests {
     fn test_overflow() {
         #[allow(dead_code)]
         #[repr(u32)]
+        #[derive(Clone, Copy)]
         enum Bar {
             V00, V01, V02, V03, V04, V05, V06, V07, V08, V09,
             V10, V11, V12, V13, V14, V15, V16, V17, V18, V19,
             V20, V21, V22, V23, V24, V25, V26, V27, V28, V29,
             V30, V31, V32, V33, V34, V35, V36, V37, V38, V39,
         }
-
-        impl Copy for Bar {}
 
         impl CLike for Bar {
             fn to_u32(&self) -> u32 {
