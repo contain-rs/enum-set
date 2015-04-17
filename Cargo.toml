@@ -10,6 +10,6 @@ authors = [
 
 repository = "https://github.com/contain-rs/enum-set"
 homepage = "https://github.com/contain-rs/enum-set"
-documentation = "https://contain-rs.github.io/enum-set/enum-set"
+documentation = "https://contain-rs.github.io/enum-set/enum_set"
 keywords = ["data-structures"]
 readme = "README.md"
