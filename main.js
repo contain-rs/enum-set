@@ -78,9 +78,11 @@
             return;
         }
 
-        if (e.which === 191 && $('#help').hasClass('hidden')) { // question mark
-            e.preventDefault();
-            $('#help').removeClass('hidden');
+        if (e.which === 191) { // question mark
+            if (e.shiftKey && $('#help').hasClass('hidden')) {
+                e.preventDefault();
+                $('#help').removeClass('hidden');
+            }
         } else if (e.which === 27) { // esc
             if (!$('#help').hasClass('hidden')) {
                 e.preventDefault();
@@ -468,6 +470,8 @@
                     if ($active.length) {
                         document.location.href = $active.find('a').prop('href');
                     }
+                } else {
+                  $active.removeClass('highlighted');
                 }
             });
         }
@@ -713,10 +717,12 @@
                 if (crates[i] == window.currentCrate) {
                     klass += ' current';
                 }
-                var desc = rawSearchIndex[crates[i]].items[0][3];
-                div.append($('<a>', {'href': '../' + crates[i] + '/index.html',
-                                     'title': plainSummaryLine(desc),
-                                     'class': klass}).text(crates[i]));
+                if (rawSearchIndex[crates[i]].items[0]) {
+                    var desc = rawSearchIndex[crates[i]].items[0][3];
+                    div.append($('<a>', {'href': '../' + crates[i] + '/index.html',
+                                         'title': plainSummaryLine(desc),
+                                         'class': klass}).text(crates[i]));
+                }
             }
             sidebar.append(div);
         }
@@ -796,19 +802,27 @@
     if (query['gotosrc']) {
         window.location = $('#src-' + query['gotosrc']).attr('href');
     }
+    if (query['gotomacrosrc']) {
+        window.location = $('.srclink').attr('href');
+    }
 
-    $("#expand-all").on("click", function() {
-        $(".docblock").show();
-        $(".toggle-label").hide();
-        $(".toggle-wrapper").removeClass("collapsed");
-        $(".collapse-toggle").children(".inner").html("-");
-    });
-
-    $("#collapse-all").on("click", function() {
-        $(".docblock").hide();
-        $(".toggle-label").show();
-        $(".toggle-wrapper").addClass("collapsed");
-        $(".collapse-toggle").children(".inner").html("+");
+    $("#toggle-all-docs").on("click", function() {
+        var toggle = $("#toggle-all-docs");
+        if (toggle.html() == "[-]") {
+            toggle.html("[+]");
+            toggle.attr("title", "expand all docs");
+            $(".docblock").hide();
+            $(".toggle-label").show();
+            $(".toggle-wrapper").addClass("collapsed");
+            $(".collapse-toggle").children(".inner").html("+");
+        } else {
+            toggle.html("[-]");
+            toggle.attr("title", "collapse all docs");
+            $(".docblock").show();
+            $(".toggle-label").hide();
+            $(".toggle-wrapper").removeClass("collapsed");
+            $(".collapse-toggle").children(".inner").html("-");
+        }
     });
 
     $(document).on("click", ".collapse-toggle", function() {
