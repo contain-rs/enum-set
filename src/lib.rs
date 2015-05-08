@@ -13,17 +13,11 @@
 //! This module defines a container which uses an efficient bit mask
 //! representation to hold C-like enum variants.
 
-#![feature(core)]
-#![cfg_attr(test, feature(test))]
-
 #![allow(raw_pointer_derive)]
-
-#[cfg(test)] extern crate test;
 
 use std::fmt;
 use std::hash;
 use std::marker::PhantomData;
-use std::u32;
 use std::iter::{self, IntoIterator};
 use std::ops;
 
@@ -91,8 +85,7 @@ pub trait CLike {
 
 fn bit<E:CLike>(e: &E) -> u32 {
     let value = e.to_u32();
-    assert!(value < u32::BITS as u32,
-            "EnumSet only supports up to {} variants.", u32::BITS - 1);
+    assert!(value < 32, "EnumSet only supports up to {} variants.", 31);
     1 << value
 }
 
