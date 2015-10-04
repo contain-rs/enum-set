@@ -95,6 +95,15 @@ impl<E:CLike> EnumSet<E> {
         EnumSet::new_with_bits(0)
     }
 
+    /// Returns an `EnumSet` with elements provided in the slice.
+    pub fn from_slice(es: &[E]) -> EnumSet<E> {
+        let mut bits = 0;
+        for e in es {
+            bits |= bit(e);
+        }
+        EnumSet::new_with_bits(bits)
+    }
+
     fn new_with_bits(bits: u32) -> EnumSet<E> {
         EnumSet { bits: bits, phantom: PhantomData }
     }
@@ -283,6 +292,16 @@ mod tests {
     }
 
     #[test]
+    fn test_from_slice() {
+        let e1 = EnumSet::from_slice(&[A, C]);
+        assert!(!e1.is_empty());
+        assert_eq!("{A, C}", format!("{:?}", e1));
+
+        let e2 = EnumSet::from_slice(&[A, A]);
+        assert_eq!("{A}", format!("{:?}", e2));
+    }
+
+    #[test]
     fn test_debug() {
         let mut e = EnumSet::new();
         assert_eq!("{}", format!("{:?}", e));
@@ -319,35 +338,21 @@ mod tests {
     #[test]
     fn test_empty_does_not_intersect_with_full() {
         let e1: EnumSet<Foo> = EnumSet::new();
-
-        let mut e2: EnumSet<Foo> = EnumSet::new();
-        e2.insert(A);
-        e2.insert(B);
-        e2.insert(C);
-
+        let e2 = EnumSet::from_slice(&[A, B, C]);
         assert!(e1.is_disjoint(&e2));
     }
 
     #[test]
     fn test_disjoint_intersects() {
-        let mut e1: EnumSet<Foo> = EnumSet::new();
-        e1.insert(A);
-
-        let mut e2: EnumSet<Foo> = EnumSet::new();
-        e2.insert(B);
-
+        let e1 = EnumSet::from_slice(&[A]);
+        let e2 = EnumSet::from_slice(&[B]);
         assert!(e1.is_disjoint(&e2));
     }
 
     #[test]
     fn test_overlapping_intersects() {
-        let mut e1: EnumSet<Foo> = EnumSet::new();
-        e1.insert(A);
-
-        let mut e2: EnumSet<Foo> = EnumSet::new();
-        e2.insert(A);
-        e2.insert(B);
-
+        let e1 = EnumSet::from_slice(&[A]);
+        let e2 = EnumSet::from_slice(&[A, B]);
         assert!(!e1.is_disjoint(&e2));
     }
 
@@ -356,15 +361,9 @@ mod tests {
 
     #[test]
     fn test_superset() {
-        let mut e1: EnumSet<Foo> = EnumSet::new();
-        e1.insert(A);
-
-        let mut e2: EnumSet<Foo> = EnumSet::new();
-        e2.insert(A);
-        e2.insert(B);
-
-        let mut e3: EnumSet<Foo> = EnumSet::new();
-        e3.insert(C);
+        let e1 = EnumSet::from_slice(&[A]);
+        let e2 = EnumSet::from_slice(&[A, B]);
+        let e3 = EnumSet::from_slice(&[C]);
 
         assert!(e1.is_subset(&e2));
         assert!(e2.is_superset(&e1));
@@ -374,8 +373,7 @@ mod tests {
 
     #[test]
     fn test_contains() {
-        let mut e1: EnumSet<Foo> = EnumSet::new();
-        e1.insert(A);
+        let mut e1: EnumSet<Foo> = EnumSet::from_slice(&[A]);
         assert!(e1.contains(&A));
         assert!(!e1.contains(&B));
         assert!(!e1.contains(&C));
@@ -419,13 +417,8 @@ mod tests {
 
     #[test]
     fn test_operators() {
-        let mut e1: EnumSet<Foo> = EnumSet::new();
-        e1.insert(A);
-        e1.insert(C);
-
-        let mut e2: EnumSet<Foo> = EnumSet::new();
-        e2.insert(B);
-        e2.insert(C);
+        let e1 = EnumSet::from_slice(&[A, C]);
+        let e2 = EnumSet::from_slice(&[B, C]);
 
         let e_union = e1 | e2;
         let elems: Vec<_> = e_union.iter().collect();
