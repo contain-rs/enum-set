@@ -195,6 +195,7 @@ impl<E:CLike> ops::BitXor for EnumSet<E> {
     }
 }
 
+#[derive(Clone, Copy)]
 /// An iterator over an EnumSet
 pub struct Iter<E> {
     index: u32,
@@ -412,6 +413,25 @@ mod tests {
         e1.insert(B);
         let elems: Vec<_> = e1.iter().collect();
         assert_eq!(vec![A,B,C], elems);
+    }
+
+    #[test]
+    fn test_clone_iterator() {
+        let mut e: EnumSet<Foo> = EnumSet::new();
+        e.insert(A);
+        e.insert(B);
+        e.insert(C);
+
+        let mut iter1 = e.iter();
+        let first_elem = iter1.next();
+        assert_eq!(Some(A), first_elem);
+
+        let iter2 = iter1.clone();
+        let elems1: Vec<_> = iter1.collect();
+        assert_eq!(vec![B, C], elems1);
+
+        let elems2: Vec<_> = iter2.collect();
+        assert_eq!(vec![B, C], elems2);
     }
 
     ///////////////////////////////////////////////////////////////////////////
