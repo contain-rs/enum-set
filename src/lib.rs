@@ -92,65 +92,72 @@ impl<E: CLike> EnumSet<E> {
         EnumSet { bits: bits, phantom: PhantomData }
     }
 
-    /// Returns the number of elements in the given `EnumSet`.
+    /// Returns the number of elements in the set.
     pub fn len(&self) -> usize {
         self.bits.count_ones() as usize
     }
 
-    /// Returns true if the `EnumSet` is empty.
+    /// Checks if the set is empty.
     pub fn is_empty(&self) -> bool {
         self.bits == 0
     }
 
+    /// Removes all elements from the set.
     pub fn clear(&mut self) {
         self.bits = 0;
     }
 
-    /// Returns `false` if the `EnumSet` contains any enum of the given `EnumSet`.
+    /// Returns `true` if the set has no elements in common with `other`.
+    ///
+    /// This is equivalent to checking for an empty intersection.
     pub fn is_disjoint(&self, other: &Self) -> bool {
         (self.bits & other.bits) == 0
     }
 
-    /// Returns `true` if a given `EnumSet` is included in this `EnumSet`.
+    /// Returns `true` if the set is a superset of `other`.
     pub fn is_superset(&self, other: &Self) -> bool {
         (self.bits & other.bits) == other.bits
     }
 
-    /// Returns `true` if this `EnumSet` is included in the given `EnumSet`.
+    /// Returns `true` if the set is a subset of `other`.
     pub fn is_subset(&self, other: &Self) -> bool {
         other.is_superset(self)
     }
 
-    /// Returns the union of both `EnumSets`.
-    pub fn union(&self, e: Self) -> Self {
-        Self::new_with_bits(self.bits | e.bits)
+    /// Returns the union of the set and `other`.
+    pub fn union(&self, other: Self) -> Self {
+        Self::new_with_bits(self.bits | other.bits)
     }
 
-    /// Returns the intersection of both `EnumSets`.
-    pub fn intersection(&self, e: Self) -> Self {
-        Self::new_with_bits(self.bits & e.bits)
+    /// Returns the intersection of the set and `other`.
+    pub fn intersection(&self, other: Self) -> Self {
+        Self::new_with_bits(self.bits & other.bits)
     }
 
-    /// Adds an enum to the `EnumSet`, and returns `true` if it wasn't there before
-    pub fn insert(&mut self, e: E) -> bool {
-        let result = !self.contains(&e);
-        self.bits |= bit(&e);
+    /// Adds the given value to the set.
+    ///
+    /// Returns `true` if the value was not already present in the set.
+    pub fn insert(&mut self, value: E) -> bool {
+        let result = !self.contains(&value);
+        self.bits |= bit(&value);
         result
     }
 
-    /// Removes an enum from the EnumSet
-    pub fn remove(&mut self, e: &E) -> bool {
-        let result = self.contains(e);
-        self.bits &= !bit(e);
+    /// Removes a value from the set.
+    ///
+    /// Returns `true` if the value was present in the set.
+    pub fn remove(&mut self, value: &E) -> bool {
+        let result = self.contains(value);
+        self.bits &= !bit(value);
         result
     }
 
-    /// Returns `true` if an `EnumSet` contains a given enum.
-    pub fn contains(&self, e: &E) -> bool {
-        (self.bits & bit(e)) != 0
+    /// Returns `true` if the set contains the given value.
+    pub fn contains(&self, value: &E) -> bool {
+        (self.bits & bit(value)) != 0
     }
 
-    /// Returns an iterator over an `EnumSet`.
+    /// Returns an iterator over the set's elements.
     pub fn iter(&self) -> Iter<E> {
         Iter::new(self.bits)
     }
@@ -189,7 +196,7 @@ impl<E: CLike> ops::BitXor for EnumSet<E> {
 }
 
 #[derive(Clone, Copy)]
-/// An iterator over an EnumSet
+/// An iterator over an `EnumSet`.
 pub struct Iter<E> {
     index: u32,
     bits: u32,
