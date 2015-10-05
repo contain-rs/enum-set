@@ -238,6 +238,12 @@ impl<E: CLike> Iterator for Iter<E> {
     }
 }
 
+impl<E: CLike> Default for EnumSet<E> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<E: CLike> iter::FromIterator<E> for EnumSet<E> {
     fn from_iter<I: IntoIterator<Item = E>>(iterator: I) -> Self {
         let mut ret = Self::new();
