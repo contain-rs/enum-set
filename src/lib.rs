@@ -21,8 +21,6 @@ use std::marker::PhantomData;
 use std::iter;
 use std::ops;
 
-// FIXME(conventions): implement union family of methods? (general design may be wrong here)
-
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
 /// A specialized set implementation to use enum types.
 pub struct EnumSet<E> {
@@ -134,6 +132,16 @@ impl<E: CLike> EnumSet<E> {
         Self::new_with_bits(self.bits & other.bits)
     }
 
+    /// Returns the difference between the set and `other`.
+    pub fn difference(&self, other: Self) -> Self {
+        Self::new_with_bits(self.bits & !other.bits)
+    }
+
+    /// Returns the symmetric difference between the set and `other`.
+    pub fn symmetric_difference(&self, other: Self) -> Self {
+        Self::new_with_bits(self.bits ^ other.bits)
+    }
+
     /// Adds the given value to the set.
     ///
     /// Returns `true` if the value was not already present in the set.
@@ -167,7 +175,7 @@ impl<E: CLike> ops::Sub for EnumSet<E> {
     type Output = Self;
 
     fn sub(self, other: Self) -> Self {
-        Self::new_with_bits(self.bits & !other.bits)
+        self.difference(other)
     }
 }
 
@@ -191,7 +199,7 @@ impl<E: CLike> ops::BitXor for EnumSet<E> {
     type Output = Self;
 
     fn bitxor(self, other: Self) -> Self {
-        Self::new_with_bits(self.bits ^ other.bits)
+        self.symmetric_difference(other)
     }
 }
 
