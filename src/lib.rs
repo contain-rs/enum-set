@@ -34,16 +34,7 @@ pub struct EnumSet<E> {
 
 impl<E:CLike+fmt::Debug> fmt::Debug for EnumSet<E> {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
-        try!(write!(fmt, "{{"));
-        let mut first = true;
-        for e in self.iter() {
-            if !first {
-                try!(write!(fmt, ", "));
-            }
-            try!(write!(fmt, "{:?}", e));
-            first = false;
-        }
-        write!(fmt, "}}")
+        fmt.debug_set().entries(self).finish()
     }
 }
 
