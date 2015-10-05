@@ -18,7 +18,7 @@
 use std::fmt;
 use std::hash;
 use std::marker::PhantomData;
-use std::iter::{self, IntoIterator};
+use std::iter;
 use std::ops;
 
 // FIXME(conventions): implement union family of methods? (general design may be wrong here)
@@ -32,7 +32,7 @@ pub struct EnumSet<E> {
     phantom: PhantomData<*mut E>,
 }
 
-impl<E:CLike+fmt::Debug> fmt::Debug for EnumSet<E> {
+impl<E: CLike + fmt::Debug> fmt::Debug for EnumSet<E> {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
         fmt.debug_set().entries(self).finish()
     }
@@ -61,6 +61,7 @@ impl<E: CLike> hash::Hash for EnumSet<E> {
 ///     fn to_u32(&self) -> u32 {
 ///         *self as u32
 ///     }
+///
 ///     unsafe fn from_u32(v: u32) -> Foo {
 ///         mem::transmute(v)
 ///     }
@@ -69,18 +70,19 @@ impl<E: CLike> hash::Hash for EnumSet<E> {
 pub trait CLike {
     /// Converts a C-like enum to a `u32`.
     fn to_u32(&self) -> u32;
+
     /// Converts a `u32` to a C-like enum. This method only needs to be safe
     /// for possible return values of `to_u32` of this trait.
     unsafe fn from_u32(u32) -> Self;
 }
 
-fn bit<E:CLike>(e: &E) -> u32 {
+fn bit<E: CLike>(e: &E) -> u32 {
     let value = e.to_u32();
     assert!(value < 32, "EnumSet only supports up to {} variants.", 31);
     1 << value
 }
 
-impl<E:CLike> EnumSet<E> {
+impl<E: CLike> EnumSet<E> {
     /// Returns an empty `EnumSet`.
     pub fn new() -> Self {
         Self::new_with_bits(0)
@@ -154,7 +156,7 @@ impl<E:CLike> EnumSet<E> {
     }
 }
 
-impl<E:CLike> ops::Sub for EnumSet<E> {
+impl<E: CLike> ops::Sub for EnumSet<E> {
     type Output = Self;
 
     fn sub(self, e: Self) -> Self {
@@ -162,7 +164,7 @@ impl<E:CLike> ops::Sub for EnumSet<E> {
     }
 }
 
-impl<E:CLike> ops::BitOr for EnumSet<E> {
+impl<E: CLike> ops::BitOr for EnumSet<E> {
     type Output = Self;
 
     fn bitor(self, e: Self) -> Self {
@@ -170,7 +172,7 @@ impl<E:CLike> ops::BitOr for EnumSet<E> {
     }
 }
 
-impl<E:CLike> ops::BitAnd for EnumSet<E> {
+impl<E: CLike> ops::BitAnd for EnumSet<E> {
     type Output = Self;
 
     fn bitand(self, e: Self) -> Self {
@@ -178,7 +180,7 @@ impl<E:CLike> ops::BitAnd for EnumSet<E> {
     }
 }
 
-impl<E:CLike> ops::BitXor for EnumSet<E> {
+impl<E: CLike> ops::BitXor for EnumSet<E> {
     type Output = Self;
 
     fn bitxor(self, e: Self) -> Self {
@@ -194,22 +196,25 @@ pub struct Iter<E> {
     phantom: PhantomData<*mut E>,
 }
 
-impl<E:CLike> Iter<E> {
+impl<E: CLike> Iter<E> {
     fn new(bits: u32) -> Self {
         Iter { index: 0, bits: bits, phantom: PhantomData }
     }
 }
 
-impl<E:CLike> Iterator for Iter<E> {
+impl<E: CLike> Iterator for Iter<E> {
     type Item = E;
+
     fn next(&mut self) -> Option<E> {
         if self.bits == 0 {
             return None;
         }
+
         while (self.bits & 1) == 0 {
             self.index += 1;
             self.bits >>= 1;
         }
+
         // Safe because of the invariant that only valid bits are set (see
         // comment on the `bit` member of this struct).
         let elem = unsafe { CLike::from_u32(self.index) };
@@ -217,29 +222,30 @@ impl<E:CLike> Iterator for Iter<E> {
         self.bits >>= 1;
         Some(elem)
     }
+
     fn size_hint(&self) -> (usize, Option<usize>) {
         let exact = self.bits.count_ones() as usize;
         (exact, Some(exact))
     }
 }
 
-impl<E:CLike> iter::FromIterator<E> for EnumSet<E> {
-    fn from_iter<I: IntoIterator<Item=E>>(iterator: I) -> Self {
+impl<E: CLike> iter::FromIterator<E> for EnumSet<E> {
+    fn from_iter<I: IntoIterator<Item = E>>(iterator: I) -> Self {
         let mut ret = Self::new();
         ret.extend(iterator);
         ret
     }
 }
 
-impl<E:CLike> Extend<E> for EnumSet<E> {
-    fn extend<I: IntoIterator<Item=E>>(&mut self, iter: I) {
+impl<E: CLike> Extend<E> for EnumSet<E> {
+    fn extend<I: IntoIterator<Item = E>>(&mut self, iter: I) {
         for element in iter {
             self.insert(element);
         }
     }
 }
 
-impl<'a, E:CLike> IntoIterator for &'a EnumSet<E> {
+impl<'a, E: CLike> IntoIterator for &'a EnumSet<E> {
     type Item = E;
     type IntoIter = Iter<E>;
     fn into_iter(self) -> Iter<E> { self.iter() }
@@ -488,10 +494,12 @@ mod tests {
             fn to_u32(&self) -> u32 {
                 *self as u32
             }
+
             unsafe fn from_u32(v: u32) -> Bar {
                 mem::transmute(v)
             }
         }
+
         let mut set = EnumSet::new();
         set.insert(Bar::V32);
     }
