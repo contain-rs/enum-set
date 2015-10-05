@@ -18,10 +18,8 @@
 use std::fmt;
 use std::hash;
 use std::marker::PhantomData;
-use std::iter::{self, IntoIterator};
+use std::iter;
 use std::ops;
-
-// FIXME(conventions): implement union family of methods? (general design may be wrong here)
 
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
 /// A specialized set implementation to use enum types.
@@ -32,18 +30,9 @@ pub struct EnumSet<E> {
     phantom: PhantomData<*mut E>,
 }
 
-impl<E:CLike+fmt::Debug> fmt::Debug for EnumSet<E> {
+impl<E: CLike + fmt::Debug> fmt::Debug for EnumSet<E> {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
-        try!(write!(fmt, "{{"));
-        let mut first = true;
-        for e in self.iter() {
-            if !first {
-                try!(write!(fmt, ", "));
-            }
-            try!(write!(fmt, "{:?}", e));
-            first = false;
-        }
-        write!(fmt, "}}")
+        fmt.debug_set().entries(self).finish()
     }
 }
 
@@ -70,6 +59,7 @@ impl<E: CLike> hash::Hash for EnumSet<E> {
 ///     fn to_u32(&self) -> u32 {
 ///         *self as u32
 ///     }
+///
 ///     unsafe fn from_u32(v: u32) -> Foo {
 ///         mem::transmute(v)
 ///     }
@@ -78,147 +68,162 @@ impl<E: CLike> hash::Hash for EnumSet<E> {
 pub trait CLike {
     /// Converts a C-like enum to a `u32`.
     fn to_u32(&self) -> u32;
+
     /// Converts a `u32` to a C-like enum. This method only needs to be safe
     /// for possible return values of `to_u32` of this trait.
     unsafe fn from_u32(u32) -> Self;
 }
 
-fn bit<E:CLike>(e: &E) -> u32 {
+fn bit<E: CLike>(e: &E) -> u32 {
     let value = e.to_u32();
     assert!(value < 32, "EnumSet only supports up to {} variants.", 31);
     1 << value
 }
 
-impl<E:CLike> EnumSet<E> {
+impl<E: CLike> EnumSet<E> {
     /// Returns an empty `EnumSet`.
-    pub fn new() -> EnumSet<E> {
-        EnumSet::new_with_bits(0)
+    pub fn new() -> Self {
+        Self::new_with_bits(0)
     }
 
-    fn new_with_bits(bits: u32) -> EnumSet<E> {
+    fn new_with_bits(bits: u32) -> Self {
         EnumSet { bits: bits, phantom: PhantomData }
     }
 
-    /// Returns the number of elements in the given `EnumSet`.
+    /// Returns the number of elements in the set.
     pub fn len(&self) -> usize {
         self.bits.count_ones() as usize
     }
 
-    /// Returns true if the `EnumSet` is empty.
+    /// Checks if the set is empty.
     pub fn is_empty(&self) -> bool {
         self.bits == 0
     }
 
+    /// Removes all elements from the set.
     pub fn clear(&mut self) {
         self.bits = 0;
     }
 
-    /// Returns `false` if the `EnumSet` contains any enum of the given `EnumSet`.
-    pub fn is_disjoint(&self, other: &EnumSet<E>) -> bool {
+    /// Returns `true` if the set has no elements in common with `other`.
+    ///
+    /// This is equivalent to checking for an empty intersection.
+    pub fn is_disjoint(&self, other: &Self) -> bool {
         (self.bits & other.bits) == 0
     }
 
-    /// Returns `true` if a given `EnumSet` is included in this `EnumSet`.
-    pub fn is_superset(&self, other: &EnumSet<E>) -> bool {
+    /// Returns `true` if the set is a superset of `other`.
+    pub fn is_superset(&self, other: &Self) -> bool {
         (self.bits & other.bits) == other.bits
     }
 
-    /// Returns `true` if this `EnumSet` is included in the given `EnumSet`.
-    pub fn is_subset(&self, other: &EnumSet<E>) -> bool {
+    /// Returns `true` if the set is a subset of `other`.
+    pub fn is_subset(&self, other: &Self) -> bool {
         other.is_superset(self)
     }
 
-    /// Returns the union of both `EnumSets`.
-    pub fn union(&self, e: EnumSet<E>) -> EnumSet<E> {
-        EnumSet::new_with_bits(self.bits | e.bits)
+    /// Returns the union of the set and `other`.
+    pub fn union(&self, other: Self) -> Self {
+        Self::new_with_bits(self.bits | other.bits)
     }
 
-    /// Returns the intersection of both `EnumSets`.
-    pub fn intersection(&self, e: EnumSet<E>) -> EnumSet<E> {
-        EnumSet::new_with_bits(self.bits & e.bits)
+    /// Returns the intersection of the set and `other`.
+    pub fn intersection(&self, other: Self) -> Self {
+        Self::new_with_bits(self.bits & other.bits)
     }
 
-    /// Adds an enum to the `EnumSet`, and returns `true` if it wasn't there before
-    pub fn insert(&mut self, e: E) -> bool {
-        let result = !self.contains(&e);
-        self.bits |= bit(&e);
+    /// Returns the difference between the set and `other`.
+    pub fn difference(&self, other: Self) -> Self {
+        Self::new_with_bits(self.bits & !other.bits)
+    }
+
+    /// Returns the symmetric difference between the set and `other`.
+    pub fn symmetric_difference(&self, other: Self) -> Self {
+        Self::new_with_bits(self.bits ^ other.bits)
+    }
+
+    /// Adds the given value to the set.
+    ///
+    /// Returns `true` if the value was not already present in the set.
+    pub fn insert(&mut self, value: E) -> bool {
+        let result = !self.contains(&value);
+        self.bits |= bit(&value);
         result
     }
 
-    /// Removes an enum from the EnumSet
-    pub fn remove(&mut self, e: &E) -> bool {
-        let result = self.contains(e);
-        self.bits &= !bit(e);
+    /// Removes a value from the set.
+    ///
+    /// Returns `true` if the value was present in the set.
+    pub fn remove(&mut self, value: &E) -> bool {
+        let result = self.contains(value);
+        self.bits &= !bit(value);
         result
     }
 
-    /// Returns `true` if an `EnumSet` contains a given enum.
-    pub fn contains(&self, e: &E) -> bool {
-        (self.bits & bit(e)) != 0
+    /// Returns `true` if the set contains the given value.
+    pub fn contains(&self, value: &E) -> bool {
+        (self.bits & bit(value)) != 0
     }
 
-    /// Returns an iterator over an `EnumSet`.
+    /// Returns an iterator over the set's elements.
     pub fn iter(&self) -> Iter<E> {
-        Iter::new(self.bits)
+        Iter { index: 0, bits: self.bits, phantom: PhantomData }
     }
 }
 
-impl<E:CLike> ops::Sub for EnumSet<E> {
-    type Output = EnumSet<E>;
+impl<E: CLike> ops::Sub for EnumSet<E> {
+    type Output = Self;
 
-    fn sub(self, e: EnumSet<E>) -> EnumSet<E> {
-        EnumSet::new_with_bits(self.bits & !e.bits)
+    fn sub(self, other: Self) -> Self {
+        self.difference(other)
     }
 }
 
-impl<E:CLike> ops::BitOr for EnumSet<E> {
-    type Output = EnumSet<E>;
+impl<E: CLike> ops::BitOr for EnumSet<E> {
+    type Output = Self;
 
-    fn bitor(self, e: EnumSet<E>) -> EnumSet<E> {
-        EnumSet::new_with_bits(self.bits | e.bits)
+    fn bitor(self, other: Self) -> Self {
+        self.union(other)
     }
 }
 
-impl<E:CLike> ops::BitAnd for EnumSet<E> {
-    type Output = EnumSet<E>;
+impl<E: CLike> ops::BitAnd for EnumSet<E> {
+    type Output = Self;
 
-    fn bitand(self, e: EnumSet<E>) -> EnumSet<E> {
-        EnumSet::new_with_bits(self.bits & e.bits)
+    fn bitand(self, other: Self) -> Self {
+        self.intersection(other)
     }
 }
 
-impl<E:CLike> ops::BitXor for EnumSet<E> {
-    type Output = EnumSet<E>;
+impl<E: CLike> ops::BitXor for EnumSet<E> {
+    type Output = Self;
 
-    fn bitxor(self, e: EnumSet<E>) -> EnumSet<E> {
-        EnumSet::new_with_bits(self.bits ^ e.bits)
+    fn bitxor(self, other: Self) -> Self {
+        self.symmetric_difference(other)
     }
 }
 
-#[derive(Clone, Copy)]
-/// An iterator over an EnumSet
+#[derive(Clone)]
+/// An iterator over an `EnumSet`.
 pub struct Iter<E> {
     index: u32,
     bits: u32,
     phantom: PhantomData<*mut E>,
 }
 
-impl<E:CLike> Iter<E> {
-    fn new(bits: u32) -> Iter<E> {
-        Iter { index: 0, bits: bits, phantom: PhantomData }
-    }
-}
-
-impl<E:CLike> Iterator for Iter<E> {
+impl<E: CLike> Iterator for Iter<E> {
     type Item = E;
+
     fn next(&mut self) -> Option<E> {
         if self.bits == 0 {
             return None;
         }
+
         while (self.bits & 1) == 0 {
             self.index += 1;
             self.bits >>= 1;
         }
+
         // Safe because of the invariant that only valid bits are set (see
         // comment on the `bit` member of this struct).
         let elem = unsafe { CLike::from_u32(self.index) };
@@ -226,29 +231,38 @@ impl<E:CLike> Iterator for Iter<E> {
         self.bits >>= 1;
         Some(elem)
     }
+
     fn size_hint(&self) -> (usize, Option<usize>) {
         let exact = self.bits.count_ones() as usize;
         (exact, Some(exact))
     }
 }
 
-impl<E:CLike> iter::FromIterator<E> for EnumSet<E> {
-    fn from_iter<I: IntoIterator<Item=E>>(iterator: I) -> EnumSet<E> {
-        let mut ret = EnumSet::new();
+impl<E: CLike> ExactSizeIterator for Iter<E> {}
+
+impl<E: CLike> Default for EnumSet<E> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl<E: CLike> iter::FromIterator<E> for EnumSet<E> {
+    fn from_iter<I: IntoIterator<Item = E>>(iterator: I) -> Self {
+        let mut ret = Self::new();
         ret.extend(iterator);
         ret
     }
 }
 
-impl<E:CLike> Extend<E> for EnumSet<E> {
-    fn extend<I: IntoIterator<Item=E>>(&mut self, iter: I) {
+impl<E: CLike> Extend<E> for EnumSet<E> {
+    fn extend<I: IntoIterator<Item = E>>(&mut self, iter: I) {
         for element in iter {
             self.insert(element);
         }
     }
 }
 
-impl<'a, E:CLike> IntoIterator for &'a EnumSet<E> {
+impl<'a, E: CLike> IntoIterator for &'a EnumSet<E> {
     type Item = E;
     type IntoIter = Iter<E>;
     fn into_iter(self) -> Iter<E> { self.iter() }
@@ -497,10 +511,12 @@ mod tests {
             fn to_u32(&self) -> u32 {
                 *self as u32
             }
+
             unsafe fn from_u32(v: u32) -> Bar {
                 mem::transmute(v)
             }
         }
+
         let mut set = EnumSet::new();
         set.insert(Bar::V32);
     }
