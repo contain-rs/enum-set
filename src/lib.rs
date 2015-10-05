@@ -82,11 +82,11 @@ fn bit<E:CLike>(e: &E) -> u32 {
 
 impl<E:CLike> EnumSet<E> {
     /// Returns an empty `EnumSet`.
-    pub fn new() -> EnumSet<E> {
-        EnumSet::new_with_bits(0)
+    pub fn new() -> Self {
+        Self::new_with_bits(0)
     }
 
-    fn new_with_bits(bits: u32) -> EnumSet<E> {
+    fn new_with_bits(bits: u32) -> Self {
         EnumSet { bits: bits, phantom: PhantomData }
     }
 
@@ -105,28 +105,28 @@ impl<E:CLike> EnumSet<E> {
     }
 
     /// Returns `false` if the `EnumSet` contains any enum of the given `EnumSet`.
-    pub fn is_disjoint(&self, other: &EnumSet<E>) -> bool {
+    pub fn is_disjoint(&self, other: &Self) -> bool {
         (self.bits & other.bits) == 0
     }
 
     /// Returns `true` if a given `EnumSet` is included in this `EnumSet`.
-    pub fn is_superset(&self, other: &EnumSet<E>) -> bool {
+    pub fn is_superset(&self, other: &Self) -> bool {
         (self.bits & other.bits) == other.bits
     }
 
     /// Returns `true` if this `EnumSet` is included in the given `EnumSet`.
-    pub fn is_subset(&self, other: &EnumSet<E>) -> bool {
+    pub fn is_subset(&self, other: &Self) -> bool {
         other.is_superset(self)
     }
 
     /// Returns the union of both `EnumSets`.
-    pub fn union(&self, e: EnumSet<E>) -> EnumSet<E> {
-        EnumSet::new_with_bits(self.bits | e.bits)
+    pub fn union(&self, e: Self) -> Self {
+        Self::new_with_bits(self.bits | e.bits)
     }
 
     /// Returns the intersection of both `EnumSets`.
-    pub fn intersection(&self, e: EnumSet<E>) -> EnumSet<E> {
-        EnumSet::new_with_bits(self.bits & e.bits)
+    pub fn intersection(&self, e: Self) -> Self {
+        Self::new_with_bits(self.bits & e.bits)
     }
 
     /// Adds an enum to the `EnumSet`, and returns `true` if it wasn't there before
@@ -155,34 +155,34 @@ impl<E:CLike> EnumSet<E> {
 }
 
 impl<E:CLike> ops::Sub for EnumSet<E> {
-    type Output = EnumSet<E>;
+    type Output = Self;
 
-    fn sub(self, e: EnumSet<E>) -> EnumSet<E> {
-        EnumSet::new_with_bits(self.bits & !e.bits)
+    fn sub(self, e: Self) -> Self {
+        Self::new_with_bits(self.bits & !e.bits)
     }
 }
 
 impl<E:CLike> ops::BitOr for EnumSet<E> {
-    type Output = EnumSet<E>;
+    type Output = Self;
 
-    fn bitor(self, e: EnumSet<E>) -> EnumSet<E> {
-        EnumSet::new_with_bits(self.bits | e.bits)
+    fn bitor(self, e: Self) -> Self {
+        Self::new_with_bits(self.bits | e.bits)
     }
 }
 
 impl<E:CLike> ops::BitAnd for EnumSet<E> {
-    type Output = EnumSet<E>;
+    type Output = Self;
 
-    fn bitand(self, e: EnumSet<E>) -> EnumSet<E> {
-        EnumSet::new_with_bits(self.bits & e.bits)
+    fn bitand(self, e: Self) -> Self {
+        Self::new_with_bits(self.bits & e.bits)
     }
 }
 
 impl<E:CLike> ops::BitXor for EnumSet<E> {
-    type Output = EnumSet<E>;
+    type Output = Self;
 
-    fn bitxor(self, e: EnumSet<E>) -> EnumSet<E> {
-        EnumSet::new_with_bits(self.bits ^ e.bits)
+    fn bitxor(self, e: Self) -> Self {
+        Self::new_with_bits(self.bits ^ e.bits)
     }
 }
 
@@ -195,7 +195,7 @@ pub struct Iter<E> {
 }
 
 impl<E:CLike> Iter<E> {
-    fn new(bits: u32) -> Iter<E> {
+    fn new(bits: u32) -> Self {
         Iter { index: 0, bits: bits, phantom: PhantomData }
     }
 }
@@ -224,8 +224,8 @@ impl<E:CLike> Iterator for Iter<E> {
 }
 
 impl<E:CLike> iter::FromIterator<E> for EnumSet<E> {
-    fn from_iter<I: IntoIterator<Item=E>>(iterator: I) -> EnumSet<E> {
-        let mut ret = EnumSet::new();
+    fn from_iter<I: IntoIterator<Item=E>>(iterator: I) -> Self {
+        let mut ret = Self::new();
         ret.extend(iterator);
         ret
     }
