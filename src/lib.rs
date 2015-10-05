@@ -238,6 +238,8 @@ impl<E: CLike> Iterator for Iter<E> {
     }
 }
 
+impl<E: CLike> ExactSizeIterator for Iter<E> {}
+
 impl<E: CLike> Default for EnumSet<E> {
     fn default() -> Self {
         Self::new()
