@@ -203,7 +203,7 @@ impl<E: CLike> ops::BitXor for EnumSet<E> {
     }
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone)]
 /// An iterator over an `EnumSet`.
 pub struct Iter<E> {
     index: u32,
