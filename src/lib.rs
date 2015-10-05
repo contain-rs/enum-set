@@ -166,32 +166,32 @@ impl<E: CLike> EnumSet<E> {
 impl<E: CLike> ops::Sub for EnumSet<E> {
     type Output = Self;
 
-    fn sub(self, e: Self) -> Self {
-        Self::new_with_bits(self.bits & !e.bits)
+    fn sub(self, other: Self) -> Self {
+        Self::new_with_bits(self.bits & !other.bits)
     }
 }
 
 impl<E: CLike> ops::BitOr for EnumSet<E> {
     type Output = Self;
 
-    fn bitor(self, e: Self) -> Self {
-        Self::new_with_bits(self.bits | e.bits)
+    fn bitor(self, other: Self) -> Self {
+        self.union(other)
     }
 }
 
 impl<E: CLike> ops::BitAnd for EnumSet<E> {
     type Output = Self;
 
-    fn bitand(self, e: Self) -> Self {
-        Self::new_with_bits(self.bits & e.bits)
+    fn bitand(self, other: Self) -> Self {
+        self.intersection(other)
     }
 }
 
 impl<E: CLike> ops::BitXor for EnumSet<E> {
     type Output = Self;
 
-    fn bitxor(self, e: Self) -> Self {
-        Self::new_with_bits(self.bits ^ e.bits)
+    fn bitxor(self, other: Self) -> Self {
+        Self::new_with_bits(self.bits ^ other.bits)
     }
 }
 
