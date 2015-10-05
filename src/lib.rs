@@ -167,7 +167,7 @@ impl<E: CLike> EnumSet<E> {
 
     /// Returns an iterator over the set's elements.
     pub fn iter(&self) -> Iter<E> {
-        Iter::new(self.bits)
+        Iter { index: 0, bits: self.bits, phantom: PhantomData }
     }
 }
 
@@ -209,12 +209,6 @@ pub struct Iter<E> {
     index: u32,
     bits: u32,
     phantom: PhantomData<*mut E>,
-}
-
-impl<E: CLike> Iter<E> {
-    fn new(bits: u32) -> Self {
-        Iter { index: 0, bits: bits, phantom: PhantomData }
-    }
 }
 
 impl<E: CLike> Iterator for Iter<E> {
