@@ -9,6 +9,7 @@
 
     <title>enum_set::CLike - Rust</title>
 
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
 
     
@@ -24,10 +25,10 @@
 
     
 
-    <section class="sidebar">
+    <nav class="sidebar">
         
         <p class='location'><a href='index.html'>enum_set</a></p><script>window.sidebarCurrent = {name: 'CLike', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
-    </section>
+    </nav>
 
     <nav class="sub">
         <form class="search-form js-only">
@@ -45,10 +46,10 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-627' class='srclink' href='../src/enum_set/lib.rs.html#68-75' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-104' class='srclink' href='../src/enum_set/lib.rs.html#66-73' title='goto source code'>[src]</a></span></h1>
 <pre class='rust trait'>pub trait CLike {
-    fn <a href='#tymethod.to_u32' class='fnname'>to_u32</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>;
-    unsafe fn <a href='#tymethod.from_u32' class='fnname'>from_u32</a>(<a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>) -&gt; Self;
+    fn <a href='#tymethod.to_u32' class='fnname'>to_u32</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>;
+    unsafe fn <a href='#tymethod.from_u32' class='fnname'>from_u32</a>(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>) -&gt; Self;
 }</pre><div class='docblock'><p>An interface for casting C-like enum to u32 and back. A typical
 implementation can be seen below:</p>
 <pre class='rust rust-example-rendered'>
@@ -73,8 +74,8 @@ implementation can be seen below:</p>
 </div>
             <h2 id='required-methods'>Required Methods</h2>
             <div class='methods'>
-        <h3 id='tymethod.to_u32' class='method stab '><code>fn <a href='#tymethod.to_u32' class='fnname'>to_u32</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code></h3><div class='docblock'><p>Converts a C-like enum to a <code>u32</code>.</p>
-</div><h3 id='tymethod.from_u32' class='method stab '><code>unsafe fn <a href='#tymethod.from_u32' class='fnname'>from_u32</a>(<a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>) -&gt; Self</code></h3><div class='docblock'><p>Converts a <code>u32</code> to a C-like enum. This method only needs to be safe
+        <h3 id='tymethod.to_u32' class='method stab '><code>fn <a href='#tymethod.to_u32' class='fnname'>to_u32</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code></h3><div class='docblock'><p>Converts a C-like enum to a <code>u32</code>.</p>
+</div><h3 id='tymethod.from_u32' class='method stab '><code>unsafe fn <a href='#tymethod.from_u32' class='fnname'>from_u32</a>(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>) -&gt; Self</code></h3><div class='docblock'><p>Converts a <code>u32</code> to a C-like enum. This method only needs to be safe
 for possible return values of <code>to_u32</code> of this trait.</p>
 </div></div>
         <h2 id='implementors'>Implementors</h2>
@@ -86,10 +87,12 @@ for possible return values of <code>to_u32</code> of this trait.</p>
 
     <section class="footer"></section>
 
-    <div id="help" class="hidden">
+    <aside id="help" class="hidden">
         <div>
+            <h1 class="hidden">Help</h1>
+
             <div class="shortcuts">
-                <h1>Keyboard Shortcuts</h1>
+                <h2>Keyboard Shortcuts</h2>
 
                 <dl>
                     <dt>?</dt>
@@ -106,7 +109,7 @@ for possible return values of <code>to_u32</code> of this trait.</p>
             </div>
 
             <div class="infos">
-                <h1>Search Tricks</h1>
+                <h2>Search Tricks</h2>
 
                 <p>
                     Prefix searches with a type followed by a colon (e.g.
@@ -116,8 +119,8 @@ for possible return values of <code>to_u32</code> of this trait.</p>
                 <p>
                     Accepted types are: <code>fn</code>, <code>mod</code>,
                     <code>struct</code>, <code>enum</code>,
-                    <code>trait</code>, <code>typedef</code> (or
-                    <code>tdef</code>).
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
                 </p>
 
                 <p>
@@ -126,7 +129,7 @@ for possible return values of <code>to_u32</code> of this trait.</p>
                 </p>
             </div>
         </div>
-    </div>
+    </aside>
 
     
 
@@ -138,6 +141,6 @@ for possible return values of <code>to_u32</code> of this trait.</p>
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     
-    <script async src="../search-index.js"></script>
+    <script defer src="../search-index.js"></script>
 </body>
 </html>
