@@ -13,8 +13,6 @@
 //! This module defines a container which uses an efficient bit mask
 //! representation to hold C-like enum variants.
 
-#![allow(raw_pointer_derive)]
-
 use std::fmt;
 use std::hash;
 use std::marker::PhantomData;
