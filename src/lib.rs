@@ -84,7 +84,7 @@ impl<E: CLike> EnumSet<E> {
         Self::new_with_bits(0)
     }
 
-    fn new_with_bits(bits: u32) -> Self {
+    pub fn new_with_bits(bits: u32) -> Self {
         EnumSet { bits: bits, phantom: PhantomData }
     }
 
