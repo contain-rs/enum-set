@@ -25,7 +25,7 @@ pub struct EnumSet<E> {
     // We must maintain the invariant that no bits are set
     // for which no variant exists
     bits: u32,
-    phantom: PhantomData<*mut E>,
+    phantom: PhantomData<E>,
 }
 
 impl<E: CLike + fmt::Debug> fmt::Debug for EnumSet<E> {
