@@ -9,13 +9,15 @@
 
     <title>lib.rs.html -- source</title>
 
+    <link rel="stylesheet" type="text/css" href="../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../main.css">
+    
 
     
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc source">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -41,7 +43,7 @@
         </form>
     </nav>
 
-    <section id='main' class="content source"><pre class="line-numbers"><span id="1">  1</span>
+    <section id='main' class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -562,526 +564,532 @@
 <span id="519">519</span>
 <span id="520">520</span>
 <span id="521">521</span>
-</pre><pre class='rust '>
-<span class='comment'>// Copyright 2012 The Rust Project Developers. See the COPYRIGHT</span>
-<span class='comment'>// file at the top-level directory of this distribution and at</span>
-<span class='comment'>// http://rust-lang.org/COPYRIGHT.</span>
-<span class='comment'>//</span>
-<span class='comment'>// Licensed under the Apache License, Version 2.0 &lt;LICENSE-APACHE or</span>
-<span class='comment'>// http://www.apache.org/licenses/LICENSE-2.0&gt; or the MIT license</span>
-<span class='comment'>// &lt;LICENSE-MIT or http://opensource.org/licenses/MIT&gt;, at your</span>
-<span class='comment'>// option. This file may not be copied, modified, or distributed</span>
-<span class='comment'>// except according to those terms.</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
+</pre><pre class="rust ">
+<span class="comment">// Copyright 2012 The Rust Project Developers. See the COPYRIGHT</span>
+<span class="comment">// file at the top-level directory of this distribution and at</span>
+<span class="comment">// http://rust-lang.org/COPYRIGHT.</span>
+<span class="comment">//</span>
+<span class="comment">// Licensed under the Apache License, Version 2.0 &lt;LICENSE-APACHE or</span>
+<span class="comment">// http://www.apache.org/licenses/LICENSE-2.0&gt; or the MIT license</span>
+<span class="comment">// &lt;LICENSE-MIT or http://opensource.org/licenses/MIT&gt;, at your</span>
+<span class="comment">// option. This file may not be copied, modified, or distributed</span>
+<span class="comment">// except according to those terms.</span>
 
-<span class='doccomment'>//! A structure for holding a set of enum variants.</span>
-<span class='doccomment'>//!</span>
-<span class='doccomment'>//! This module defines a container which uses an efficient bit mask</span>
-<span class='doccomment'>//! representation to hold C-like enum variants.</span>
+<span class="doccomment">//! A structure for holding a set of enum variants.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! This module defines a container which uses an efficient bit mask</span>
+<span class="doccomment">//! representation to hold C-like enum variants.</span>
 
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>hash</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>marker</span>::<span class='ident'>PhantomData</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>iter</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ops</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">hash</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">marker</span>::<span class="ident">PhantomData</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">iter</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ops</span>;
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Copy</span>, <span class='ident'>Clone</span>, <span class='ident'>PartialEq</span>, <span class='ident'>Eq</span>, <span class='ident'>PartialOrd</span>, <span class='ident'>Ord</span>)]</span>
-<span class='doccomment'>/// A specialized set implementation to use enum types.</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>E</span><span class='op'>&gt;</span> {
-    <span class='comment'>// We must maintain the invariant that no bits are set</span>
-    <span class='comment'>// for which no variant exists</span>
-    <span class='ident'>bits</span>: <span class='ident'>u32</span>,
-    <span class='ident'>phantom</span>: <span class='ident'>PhantomData</span><span class='op'>&lt;</span><span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>E</span><span class='op'>&gt;</span>,
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>)]</span>
+<span class="doccomment">/// A specialized set implementation to use enum types.</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+    <span class="comment">// We must maintain the invariant that no bits are set</span>
+    <span class="comment">// for which no variant exists</span>
+    <span class="ident">bits</span>: <span class="ident">u32</span>,
+    <span class="ident">phantom</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>,
 }
 
-<span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>E</span>: <span class='ident'>CLike</span> <span class='op'>+</span> <span class='ident'>fmt</span>::<span class='ident'>Debug</span><span class='op'>&gt;</span> <span class='ident'>fmt</span>::<span class='ident'>Debug</span> <span class='kw'>for</span> <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>E</span><span class='op'>&gt;</span> {
-    <span class='kw'>fn</span> <span class='ident'>fmt</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>fmt</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>fmt</span>::<span class='ident'>Formatter</span>) <span class='op'>-&gt;</span> <span class='ident'>fmt</span>::<span class='prelude-ty'>Result</span> {
-        <span class='ident'>fmt</span>.<span class='ident'>debug_set</span>().<span class='ident'>entries</span>(<span class='self'>self</span>).<span class='ident'>finish</span>()
-    }
-}
-
-<span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>E</span>: <span class='ident'>CLike</span><span class='op'>&gt;</span> <span class='ident'>hash</span>::<span class='ident'>Hash</span> <span class='kw'>for</span> <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>E</span><span class='op'>&gt;</span> {
-    <span class='kw'>fn</span> <span class='ident'>hash</span><span class='op'>&lt;</span><span class='ident'>H</span>: <span class='ident'>hash</span>::<span class='ident'>Hasher</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>state</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>H</span>) {
-        <span class='self'>self</span>.<span class='ident'>bits</span>.<span class='ident'>hash</span>(<span class='ident'>state</span>);
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">CLike</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Debug</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">fmt</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+        <span class="ident">fmt</span>.<span class="ident">debug_set</span>().<span class="ident">entries</span>(<span class="self">self</span>).<span class="ident">finish</span>()
     }
 }
 
-<span class='doccomment'>/// An interface for casting C-like enum to u32 and back. A typical</span>
-<span class='doccomment'>/// implementation can be seen below:</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// ```</span>
-<span class='doccomment'>/// use enum_set::CLike;</span>
-<span class='doccomment'>/// use std::mem;</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// #[derive(Clone, Copy)]</span>
-<span class='doccomment'>/// #[repr(u32)]</span>
-<span class='doccomment'>/// enum Foo {</span>
-<span class='doccomment'>///     A, B, C</span>
-<span class='doccomment'>/// }</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// impl CLike for Foo {</span>
-<span class='doccomment'>///     fn to_u32(&amp;self) -&gt; u32 {</span>
-<span class='doccomment'>///         *self as u32</span>
-<span class='doccomment'>///     }</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>///     unsafe fn from_u32(v: u32) -&gt; Foo {</span>
-<span class='doccomment'>///         mem::transmute(v)</span>
-<span class='doccomment'>///     }</span>
-<span class='doccomment'>/// }</span>
-<span class='doccomment'>/// ```</span>
-<span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>CLike</span> {
-    <span class='doccomment'>/// Converts a C-like enum to a `u32`.</span>
-    <span class='kw'>fn</span> <span class='ident'>to_u32</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>u32</span>;
-
-    <span class='doccomment'>/// Converts a `u32` to a C-like enum. This method only needs to be safe</span>
-    <span class='doccomment'>/// for possible return values of `to_u32` of this trait.</span>
-    <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>from_u32</span>(<span class='ident'>u32</span>) <span class='op'>-&gt;</span> <span class='kw'>Self</span>;
-}
-
-<span class='kw'>fn</span> <span class='ident'>bit</span><span class='op'>&lt;</span><span class='ident'>E</span>: <span class='ident'>CLike</span><span class='op'>&gt;</span>(<span class='ident'>e</span>: <span class='kw-2'>&amp;</span><span class='ident'>E</span>) <span class='op'>-&gt;</span> <span class='ident'>u32</span> {
-    <span class='kw'>let</span> <span class='ident'>value</span> <span class='op'>=</span> <span class='ident'>e</span>.<span class='ident'>to_u32</span>();
-    <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>value</span> <span class='op'>&lt;</span> <span class='number'>32</span>, <span class='string'>&quot;EnumSet only supports up to {} variants.&quot;</span>, <span class='number'>31</span>);
-    <span class='number'>1</span> <span class='op'>&lt;&lt;</span> <span class='ident'>value</span>
-}
-
-<span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>E</span>: <span class='ident'>CLike</span><span class='op'>&gt;</span> <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>E</span><span class='op'>&gt;</span> {
-    <span class='doccomment'>/// Returns an empty `EnumSet`.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>() <span class='op'>-&gt;</span> <span class='kw'>Self</span> {
-        <span class='ident'>Self</span>::<span class='ident'>new_with_bits</span>(<span class='number'>0</span>)
-    }
-
-    <span class='kw'>fn</span> <span class='ident'>new_with_bits</span>(<span class='ident'>bits</span>: <span class='ident'>u32</span>) <span class='op'>-&gt;</span> <span class='kw'>Self</span> {
-        <span class='ident'>EnumSet</span> { <span class='ident'>bits</span>: <span class='ident'>bits</span>, <span class='ident'>phantom</span>: <span class='ident'>PhantomData</span> }
-    }
-
-    <span class='doccomment'>/// Returns the number of elements in the set.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>len</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>usize</span> {
-        <span class='self'>self</span>.<span class='ident'>bits</span>.<span class='ident'>count_ones</span>() <span class='kw'>as</span> <span class='ident'>usize</span>
-    }
-
-    <span class='doccomment'>/// Checks if the set is empty.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>is_empty</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
-        <span class='self'>self</span>.<span class='ident'>bits</span> <span class='op'>==</span> <span class='number'>0</span>
-    }
-
-    <span class='doccomment'>/// Removes all elements from the set.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>clear</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) {
-        <span class='self'>self</span>.<span class='ident'>bits</span> <span class='op'>=</span> <span class='number'>0</span>;
-    }
-
-    <span class='doccomment'>/// Returns `true` if the set has no elements in common with `other`.</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// This is equivalent to checking for an empty intersection.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>is_disjoint</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>other</span>: <span class='kw-2'>&amp;</span><span class='kw'>Self</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
-        (<span class='self'>self</span>.<span class='ident'>bits</span> <span class='kw-2'>&amp;</span> <span class='ident'>other</span>.<span class='ident'>bits</span>) <span class='op'>==</span> <span class='number'>0</span>
-    }
-
-    <span class='doccomment'>/// Returns `true` if the set is a superset of `other`.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>is_superset</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>other</span>: <span class='kw-2'>&amp;</span><span class='kw'>Self</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
-        (<span class='self'>self</span>.<span class='ident'>bits</span> <span class='kw-2'>&amp;</span> <span class='ident'>other</span>.<span class='ident'>bits</span>) <span class='op'>==</span> <span class='ident'>other</span>.<span class='ident'>bits</span>
-    }
-
-    <span class='doccomment'>/// Returns `true` if the set is a subset of `other`.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>is_subset</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>other</span>: <span class='kw-2'>&amp;</span><span class='kw'>Self</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
-        <span class='ident'>other</span>.<span class='ident'>is_superset</span>(<span class='self'>self</span>)
-    }
-
-    <span class='doccomment'>/// Returns the union of the set and `other`.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>union</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>other</span>: <span class='kw'>Self</span>) <span class='op'>-&gt;</span> <span class='kw'>Self</span> {
-        <span class='ident'>Self</span>::<span class='ident'>new_with_bits</span>(<span class='self'>self</span>.<span class='ident'>bits</span> <span class='op'>|</span> <span class='ident'>other</span>.<span class='ident'>bits</span>)
-    }
-
-    <span class='doccomment'>/// Returns the intersection of the set and `other`.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>intersection</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>other</span>: <span class='kw'>Self</span>) <span class='op'>-&gt;</span> <span class='kw'>Self</span> {
-        <span class='ident'>Self</span>::<span class='ident'>new_with_bits</span>(<span class='self'>self</span>.<span class='ident'>bits</span> <span class='kw-2'>&amp;</span> <span class='ident'>other</span>.<span class='ident'>bits</span>)
-    }
-
-    <span class='doccomment'>/// Returns the difference between the set and `other`.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>difference</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>other</span>: <span class='kw'>Self</span>) <span class='op'>-&gt;</span> <span class='kw'>Self</span> {
-        <span class='ident'>Self</span>::<span class='ident'>new_with_bits</span>(<span class='self'>self</span>.<span class='ident'>bits</span> <span class='kw-2'>&amp;</span> <span class='op'>!</span><span class='ident'>other</span>.<span class='ident'>bits</span>)
-    }
-
-    <span class='doccomment'>/// Returns the symmetric difference between the set and `other`.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>symmetric_difference</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>other</span>: <span class='kw'>Self</span>) <span class='op'>-&gt;</span> <span class='kw'>Self</span> {
-        <span class='ident'>Self</span>::<span class='ident'>new_with_bits</span>(<span class='self'>self</span>.<span class='ident'>bits</span> <span class='op'>^</span> <span class='ident'>other</span>.<span class='ident'>bits</span>)
-    }
-
-    <span class='doccomment'>/// Adds the given value to the set.</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// Returns `true` if the value was not already present in the set.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>insert</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>value</span>: <span class='ident'>E</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
-        <span class='kw'>let</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='op'>!</span><span class='self'>self</span>.<span class='ident'>contains</span>(<span class='kw-2'>&amp;</span><span class='ident'>value</span>);
-        <span class='self'>self</span>.<span class='ident'>bits</span> <span class='op'>|=</span> <span class='ident'>bit</span>(<span class='kw-2'>&amp;</span><span class='ident'>value</span>);
-        <span class='ident'>result</span>
-    }
-
-    <span class='doccomment'>/// Removes a value from the set.</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// Returns `true` if the value was present in the set.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>remove</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>value</span>: <span class='kw-2'>&amp;</span><span class='ident'>E</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
-        <span class='kw'>let</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>contains</span>(<span class='ident'>value</span>);
-        <span class='self'>self</span>.<span class='ident'>bits</span> <span class='op'>&amp;=</span> <span class='op'>!</span><span class='ident'>bit</span>(<span class='ident'>value</span>);
-        <span class='ident'>result</span>
-    }
-
-    <span class='doccomment'>/// Returns `true` if the set contains the given value.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>contains</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>value</span>: <span class='kw-2'>&amp;</span><span class='ident'>E</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
-        (<span class='self'>self</span>.<span class='ident'>bits</span> <span class='kw-2'>&amp;</span> <span class='ident'>bit</span>(<span class='ident'>value</span>)) <span class='op'>!=</span> <span class='number'>0</span>
-    }
-
-    <span class='doccomment'>/// Returns an iterator over the set&#39;s elements.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>iter</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>Iter</span><span class='op'>&lt;</span><span class='ident'>E</span><span class='op'>&gt;</span> {
-        <span class='ident'>Iter</span> { <span class='ident'>index</span>: <span class='number'>0</span>, <span class='ident'>bits</span>: <span class='self'>self</span>.<span class='ident'>bits</span>, <span class='ident'>phantom</span>: <span class='ident'>PhantomData</span> }
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">CLike</span><span class="op">&gt;</span> <span class="ident">hash</span>::<span class="ident">Hash</span> <span class="kw">for</span> <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">hash</span><span class="op">&lt;</span><span class="ident">H</span>: <span class="ident">hash</span>::<span class="ident">Hasher</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">state</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">H</span>) {
+        <span class="self">self</span>.<span class="ident">bits</span>.<span class="ident">hash</span>(<span class="ident">state</span>);
     }
 }
 
-<span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>E</span>: <span class='ident'>CLike</span><span class='op'>&gt;</span> <span class='ident'>ops</span>::<span class='ident'>Sub</span> <span class='kw'>for</span> <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>E</span><span class='op'>&gt;</span> {
-    <span class='kw'>type</span> <span class='ident'>Output</span> <span class='op'>=</span> <span class='kw'>Self</span>;
+<span class="doccomment">/// An interface for casting C-like enum to `u32` and back.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The returned value must be no more than 31: `EnumSet` does not support more cases than this.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// A typical implementation can be seen below:</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">/// use enum_set::CLike;</span>
+<span class="doccomment">/// use std::mem;</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// #[derive(Clone, Copy)]</span>
+<span class="doccomment">/// #[repr(u32)]</span>
+<span class="doccomment">/// enum Foo {</span>
+<span class="doccomment">///     A, B, C</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// impl CLike for Foo {</span>
+<span class="doccomment">///     fn to_u32(&amp;self) -&gt; u32 {</span>
+<span class="doccomment">///         *self as u32</span>
+<span class="doccomment">///     }</span>
+<span class="doccomment">///</span>
+<span class="doccomment">///     unsafe fn from_u32(v: u32) -&gt; Foo {</span>
+<span class="doccomment">///         mem::transmute(v)</span>
+<span class="doccomment">///     }</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">/// ```</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">CLike</span> {
+    <span class="doccomment">/// Converts a C-like enum to a `u32`. The value must be `&lt;= 31`.</span>
+    <span class="kw">fn</span> <span class="ident">to_u32</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">u32</span>;
 
-    <span class='kw'>fn</span> <span class='ident'>sub</span>(<span class='self'>self</span>, <span class='ident'>other</span>: <span class='kw'>Self</span>) <span class='op'>-&gt;</span> <span class='kw'>Self</span> {
-        <span class='self'>self</span>.<span class='ident'>difference</span>(<span class='ident'>other</span>)
+    <span class="doccomment">/// Converts a `u32` to a C-like enum. This method only needs to be safe</span>
+    <span class="doccomment">/// for possible return values of `to_u32` of this trait.</span>
+    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">from_u32</span>(<span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="self">Self</span>;
+}
+
+<span class="kw">fn</span> <span class="ident">bit</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">CLike</span><span class="op">&gt;</span>(<span class="ident">e</span>: <span class="kw-2">&amp;</span><span class="ident">E</span>) <span class="op">-&gt;</span> <span class="ident">u32</span> {
+    <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">e</span>.<span class="ident">to_u32</span>();
+    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">value</span> <span class="op">&lt;</span> <span class="number">32</span>, <span class="string">&quot;EnumSet only supports up to {} variants.&quot;</span>, <span class="number">31</span>);
+    <span class="number">1</span> <span class="op">&lt;&lt;</span> <span class="ident">value</span>
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">CLike</span><span class="op">&gt;</span> <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Returns an empty `EnumSet`.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span>::<span class="ident">new_with_bits</span>(<span class="number">0</span>)
+    }
+
+    <span class="kw">fn</span> <span class="ident">new_with_bits</span>(<span class="ident">bits</span>: <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="ident">EnumSet</span> { <span class="ident">bits</span>: <span class="ident">bits</span>, <span class="ident">phantom</span>: <span class="ident">PhantomData</span> }
+    }
+
+    <span class="doccomment">/// Returns the number of elements in the set.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">usize</span> {
+        <span class="self">self</span>.<span class="ident">bits</span>.<span class="ident">count_ones</span>() <span class="kw">as</span> <span class="ident">usize</span>
+    }
+
+    <span class="doccomment">/// Checks if the set is empty.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_empty</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+        <span class="self">self</span>.<span class="ident">bits</span> <span class="op">==</span> <span class="number">0</span>
+    }
+
+    <span class="doccomment">/// Removes all elements from the set.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+        <span class="self">self</span>.<span class="ident">bits</span> <span class="op">=</span> <span class="number">0</span>;
+    }
+
+    <span class="doccomment">/// Returns `true` if the set has no elements in common with `other`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This is equivalent to checking for an empty intersection.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_disjoint</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="self">Self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+        (<span class="self">self</span>.<span class="ident">bits</span> <span class="op">&amp;</span> <span class="ident">other</span>.<span class="ident">bits</span>) <span class="op">==</span> <span class="number">0</span>
+    }
+
+    <span class="doccomment">/// Returns `true` if the set is a superset of `other`.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_superset</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="self">Self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+        (<span class="self">self</span>.<span class="ident">bits</span> <span class="op">&amp;</span> <span class="ident">other</span>.<span class="ident">bits</span>) <span class="op">==</span> <span class="ident">other</span>.<span class="ident">bits</span>
+    }
+
+    <span class="doccomment">/// Returns `true` if the set is a subset of `other`.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_subset</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="self">Self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+        <span class="ident">other</span>.<span class="ident">is_superset</span>(<span class="self">self</span>)
+    }
+
+    <span class="doccomment">/// Returns the union of the set and `other`.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">union</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="self">Self</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span>::<span class="ident">new_with_bits</span>(<span class="self">self</span>.<span class="ident">bits</span> <span class="op">|</span> <span class="ident">other</span>.<span class="ident">bits</span>)
+    }
+
+    <span class="doccomment">/// Returns the intersection of the set and `other`.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">intersection</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="self">Self</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span>::<span class="ident">new_with_bits</span>(<span class="self">self</span>.<span class="ident">bits</span> <span class="op">&amp;</span> <span class="ident">other</span>.<span class="ident">bits</span>)
+    }
+
+    <span class="doccomment">/// Returns the difference between the set and `other`.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">difference</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="self">Self</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span>::<span class="ident">new_with_bits</span>(<span class="self">self</span>.<span class="ident">bits</span> <span class="op">&amp;</span> <span class="op">!</span><span class="ident">other</span>.<span class="ident">bits</span>)
+    }
+
+    <span class="doccomment">/// Returns the symmetric difference between the set and `other`.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">symmetric_difference</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="self">Self</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span>::<span class="ident">new_with_bits</span>(<span class="self">self</span>.<span class="ident">bits</span> <span class="op">^</span> <span class="ident">other</span>.<span class="ident">bits</span>)
+    }
+
+    <span class="doccomment">/// Adds the given value to the set.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Returns `true` if the value was not already present in the set.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">E</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>);
+        <span class="self">self</span>.<span class="ident">bits</span> <span class="op">|=</span> <span class="ident">bit</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>);
+        <span class="ident">result</span>
+    }
+
+    <span class="doccomment">/// Removes a value from the set.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Returns `true` if the value was present in the set.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">E</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">contains</span>(<span class="ident">value</span>);
+        <span class="self">self</span>.<span class="ident">bits</span> <span class="op">&amp;=</span> <span class="op">!</span><span class="ident">bit</span>(<span class="ident">value</span>);
+        <span class="ident">result</span>
+    }
+
+    <span class="doccomment">/// Returns `true` if the set contains the given value.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">E</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+        (<span class="self">self</span>.<span class="ident">bits</span> <span class="op">&amp;</span> <span class="ident">bit</span>(<span class="ident">value</span>)) <span class="op">!=</span> <span class="number">0</span>
+    }
+
+    <span class="doccomment">/// Returns an iterator over the set&#39;s elements.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">iter</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Iter</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+        <span class="ident">Iter</span> { <span class="ident">index</span>: <span class="number">0</span>, <span class="ident">bits</span>: <span class="self">self</span>.<span class="ident">bits</span>, <span class="ident">phantom</span>: <span class="ident">PhantomData</span> }
     }
 }
 
-<span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>E</span>: <span class='ident'>CLike</span><span class='op'>&gt;</span> <span class='ident'>ops</span>::<span class='ident'>BitOr</span> <span class='kw'>for</span> <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>E</span><span class='op'>&gt;</span> {
-    <span class='kw'>type</span> <span class='ident'>Output</span> <span class='op'>=</span> <span class='kw'>Self</span>;
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">CLike</span><span class="op">&gt;</span> <span class="ident">ops</span>::<span class="ident">Sub</span> <span class="kw">for</span> <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+    <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="self">Self</span>;
 
-    <span class='kw'>fn</span> <span class='ident'>bitor</span>(<span class='self'>self</span>, <span class='ident'>other</span>: <span class='kw'>Self</span>) <span class='op'>-&gt;</span> <span class='kw'>Self</span> {
-        <span class='self'>self</span>.<span class='ident'>union</span>(<span class='ident'>other</span>)
+    <span class="kw">fn</span> <span class="ident">sub</span>(<span class="self">self</span>, <span class="ident">other</span>: <span class="self">Self</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">difference</span>(<span class="ident">other</span>)
     }
 }
 
-<span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>E</span>: <span class='ident'>CLike</span><span class='op'>&gt;</span> <span class='ident'>ops</span>::<span class='ident'>BitAnd</span> <span class='kw'>for</span> <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>E</span><span class='op'>&gt;</span> {
-    <span class='kw'>type</span> <span class='ident'>Output</span> <span class='op'>=</span> <span class='kw'>Self</span>;
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">CLike</span><span class="op">&gt;</span> <span class="ident">ops</span>::<span class="ident">BitOr</span> <span class="kw">for</span> <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+    <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="self">Self</span>;
 
-    <span class='kw'>fn</span> <span class='ident'>bitand</span>(<span class='self'>self</span>, <span class='ident'>other</span>: <span class='kw'>Self</span>) <span class='op'>-&gt;</span> <span class='kw'>Self</span> {
-        <span class='self'>self</span>.<span class='ident'>intersection</span>(<span class='ident'>other</span>)
+    <span class="kw">fn</span> <span class="ident">bitor</span>(<span class="self">self</span>, <span class="ident">other</span>: <span class="self">Self</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">union</span>(<span class="ident">other</span>)
     }
 }
 
-<span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>E</span>: <span class='ident'>CLike</span><span class='op'>&gt;</span> <span class='ident'>ops</span>::<span class='ident'>BitXor</span> <span class='kw'>for</span> <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>E</span><span class='op'>&gt;</span> {
-    <span class='kw'>type</span> <span class='ident'>Output</span> <span class='op'>=</span> <span class='kw'>Self</span>;
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">CLike</span><span class="op">&gt;</span> <span class="ident">ops</span>::<span class="ident">BitAnd</span> <span class="kw">for</span> <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+    <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="self">Self</span>;
 
-    <span class='kw'>fn</span> <span class='ident'>bitxor</span>(<span class='self'>self</span>, <span class='ident'>other</span>: <span class='kw'>Self</span>) <span class='op'>-&gt;</span> <span class='kw'>Self</span> {
-        <span class='self'>self</span>.<span class='ident'>symmetric_difference</span>(<span class='ident'>other</span>)
+    <span class="kw">fn</span> <span class="ident">bitand</span>(<span class="self">self</span>, <span class="ident">other</span>: <span class="self">Self</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">intersection</span>(<span class="ident">other</span>)
     }
 }
 
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Clone</span>)]</span>
-<span class='doccomment'>/// An iterator over an `EnumSet`.</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Iter</span><span class='op'>&lt;</span><span class='ident'>E</span><span class='op'>&gt;</span> {
-    <span class='ident'>index</span>: <span class='ident'>u32</span>,
-    <span class='ident'>bits</span>: <span class='ident'>u32</span>,
-    <span class='ident'>phantom</span>: <span class='ident'>PhantomData</span><span class='op'>&lt;</span><span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>E</span><span class='op'>&gt;</span>,
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">CLike</span><span class="op">&gt;</span> <span class="ident">ops</span>::<span class="ident">BitXor</span> <span class="kw">for</span> <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+    <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="self">Self</span>;
+
+    <span class="kw">fn</span> <span class="ident">bitxor</span>(<span class="self">self</span>, <span class="ident">other</span>: <span class="self">Self</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">symmetric_difference</span>(<span class="ident">other</span>)
+    }
 }
 
-<span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>E</span>: <span class='ident'>CLike</span><span class='op'>&gt;</span> <span class='ident'>Iterator</span> <span class='kw'>for</span> <span class='ident'>Iter</span><span class='op'>&lt;</span><span class='ident'>E</span><span class='op'>&gt;</span> {
-    <span class='kw'>type</span> <span class='ident'>Item</span> <span class='op'>=</span> <span class='ident'>E</span>;
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
+<span class="doccomment">/// An iterator over an `EnumSet`.</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Iter</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+    <span class="ident">index</span>: <span class="ident">u32</span>,
+    <span class="ident">bits</span>: <span class="ident">u32</span>,
+    <span class="ident">phantom</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">E</span><span class="op">&gt;</span>,
+}
 
-    <span class='kw'>fn</span> <span class='ident'>next</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>E</span><span class='op'>&gt;</span> {
-        <span class='kw'>if</span> <span class='self'>self</span>.<span class='ident'>bits</span> <span class='op'>==</span> <span class='number'>0</span> {
-            <span class='kw'>return</span> <span class='prelude-val'>None</span>;
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">CLike</span><span class="op">&gt;</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">Iter</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+    <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="ident">E</span>;
+
+    <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">bits</span> <span class="op">==</span> <span class="number">0</span> {
+            <span class="kw">return</span> <span class="prelude-val">None</span>;
         }
 
-        <span class='kw'>while</span> (<span class='self'>self</span>.<span class='ident'>bits</span> <span class='kw-2'>&amp;</span> <span class='number'>1</span>) <span class='op'>==</span> <span class='number'>0</span> {
-            <span class='self'>self</span>.<span class='ident'>index</span> <span class='op'>+=</span> <span class='number'>1</span>;
-            <span class='self'>self</span>.<span class='ident'>bits</span> <span class='op'>&gt;&gt;=</span> <span class='number'>1</span>;
+        <span class="kw">while</span> (<span class="self">self</span>.<span class="ident">bits</span> <span class="op">&amp;</span> <span class="number">1</span>) <span class="op">==</span> <span class="number">0</span> {
+            <span class="self">self</span>.<span class="ident">index</span> <span class="op">+=</span> <span class="number">1</span>;
+            <span class="self">self</span>.<span class="ident">bits</span> <span class="op">&gt;&gt;=</span> <span class="number">1</span>;
         }
 
-        <span class='comment'>// Safe because of the invariant that only valid bits are set (see</span>
-        <span class='comment'>// comment on the `bit` member of this struct).</span>
-        <span class='kw'>let</span> <span class='ident'>elem</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='ident'>CLike</span>::<span class='ident'>from_u32</span>(<span class='self'>self</span>.<span class='ident'>index</span>) };
-        <span class='self'>self</span>.<span class='ident'>index</span> <span class='op'>+=</span> <span class='number'>1</span>;
-        <span class='self'>self</span>.<span class='ident'>bits</span> <span class='op'>&gt;&gt;=</span> <span class='number'>1</span>;
-        <span class='prelude-val'>Some</span>(<span class='ident'>elem</span>)
+        <span class="comment">// Safe because of the invariant that only valid bits are set (see</span>
+        <span class="comment">// comment on the `bit` member of this struct).</span>
+        <span class="kw">let</span> <span class="ident">elem</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">CLike</span>::<span class="ident">from_u32</span>(<span class="self">self</span>.<span class="ident">index</span>) };
+        <span class="self">self</span>.<span class="ident">index</span> <span class="op">+=</span> <span class="number">1</span>;
+        <span class="self">self</span>.<span class="ident">bits</span> <span class="op">&gt;&gt;=</span> <span class="number">1</span>;
+        <span class="prelude-val">Some</span>(<span class="ident">elem</span>)
     }
 
-    <span class='kw'>fn</span> <span class='ident'>size_hint</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> (<span class='ident'>usize</span>, <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>usize</span><span class='op'>&gt;</span>) {
-        <span class='kw'>let</span> <span class='ident'>exact</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>bits</span>.<span class='ident'>count_ones</span>() <span class='kw'>as</span> <span class='ident'>usize</span>;
-        (<span class='ident'>exact</span>, <span class='prelude-val'>Some</span>(<span class='ident'>exact</span>))
+    <span class="kw">fn</span> <span class="ident">size_hint</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> (<span class="ident">usize</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>) {
+        <span class="kw">let</span> <span class="ident">exact</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">bits</span>.<span class="ident">count_ones</span>() <span class="kw">as</span> <span class="ident">usize</span>;
+        (<span class="ident">exact</span>, <span class="prelude-val">Some</span>(<span class="ident">exact</span>))
     }
 }
 
-<span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>E</span>: <span class='ident'>CLike</span><span class='op'>&gt;</span> <span class='ident'>ExactSizeIterator</span> <span class='kw'>for</span> <span class='ident'>Iter</span><span class='op'>&lt;</span><span class='ident'>E</span><span class='op'>&gt;</span> {}
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">CLike</span><span class="op">&gt;</span> <span class="ident">ExactSizeIterator</span> <span class="kw">for</span> <span class="ident">Iter</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {}
 
-<span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>E</span>: <span class='ident'>CLike</span><span class='op'>&gt;</span> <span class='ident'>Default</span> <span class='kw'>for</span> <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>E</span><span class='op'>&gt;</span> {
-    <span class='kw'>fn</span> <span class='ident'>default</span>() <span class='op'>-&gt;</span> <span class='kw'>Self</span> {
-        <span class='ident'>Self</span>::<span class='ident'>new</span>()
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">CLike</span><span class="op">&gt;</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span>::<span class="ident">new</span>()
     }
 }
 
-<span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>E</span>: <span class='ident'>CLike</span><span class='op'>&gt;</span> <span class='ident'>iter</span>::<span class='ident'>FromIterator</span><span class='op'>&lt;</span><span class='ident'>E</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>E</span><span class='op'>&gt;</span> {
-    <span class='kw'>fn</span> <span class='ident'>from_iter</span><span class='op'>&lt;</span><span class='ident'>I</span>: <span class='ident'>IntoIterator</span><span class='op'>&lt;</span><span class='ident'>Item</span> <span class='op'>=</span> <span class='ident'>E</span><span class='op'>&gt;&gt;</span>(<span class='ident'>iterator</span>: <span class='ident'>I</span>) <span class='op'>-&gt;</span> <span class='kw'>Self</span> {
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>ret</span> <span class='op'>=</span> <span class='ident'>Self</span>::<span class='ident'>new</span>();
-        <span class='ident'>ret</span>.<span class='ident'>extend</span>(<span class='ident'>iterator</span>);
-        <span class='ident'>ret</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">CLike</span><span class="op">&gt;</span> <span class="ident">iter</span>::<span class="ident">FromIterator</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from_iter</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">E</span><span class="op">&gt;&gt;</span>(<span class="ident">iterator</span>: <span class="ident">I</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ret</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">new</span>();
+        <span class="ident">ret</span>.<span class="ident">extend</span>(<span class="ident">iterator</span>);
+        <span class="ident">ret</span>
     }
 }
 
-<span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>E</span>: <span class='ident'>CLike</span><span class='op'>&gt;</span> <span class='ident'>Extend</span><span class='op'>&lt;</span><span class='ident'>E</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>E</span><span class='op'>&gt;</span> {
-    <span class='kw'>fn</span> <span class='ident'>extend</span><span class='op'>&lt;</span><span class='ident'>I</span>: <span class='ident'>IntoIterator</span><span class='op'>&lt;</span><span class='ident'>Item</span> <span class='op'>=</span> <span class='ident'>E</span><span class='op'>&gt;&gt;</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>iter</span>: <span class='ident'>I</span>) {
-        <span class='kw'>for</span> <span class='ident'>element</span> <span class='kw'>in</span> <span class='ident'>iter</span> {
-            <span class='self'>self</span>.<span class='ident'>insert</span>(<span class='ident'>element</span>);
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">CLike</span><span class="op">&gt;</span> <span class="ident">Extend</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">extend</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">E</span><span class="op">&gt;&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">iter</span>: <span class="ident">I</span>) {
+        <span class="kw">for</span> <span class="ident">element</span> <span class="kw">in</span> <span class="ident">iter</span> {
+            <span class="self">self</span>.<span class="ident">insert</span>(<span class="ident">element</span>);
         }
     }
 }
 
-<span class='kw'>impl</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>, <span class='ident'>E</span>: <span class='ident'>CLike</span><span class='op'>&gt;</span> <span class='ident'>IntoIterator</span> <span class='kw'>for</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>E</span><span class='op'>&gt;</span> {
-    <span class='kw'>type</span> <span class='ident'>Item</span> <span class='op'>=</span> <span class='ident'>E</span>;
-    <span class='kw'>type</span> <span class='ident'>IntoIter</span> <span class='op'>=</span> <span class='ident'>Iter</span><span class='op'>&lt;</span><span class='ident'>E</span><span class='op'>&gt;</span>;
-    <span class='kw'>fn</span> <span class='ident'>into_iter</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>Iter</span><span class='op'>&lt;</span><span class='ident'>E</span><span class='op'>&gt;</span> { <span class='self'>self</span>.<span class='ident'>iter</span>() }
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">E</span>: <span class="ident">CLike</span><span class="op">&gt;</span> <span class="ident">IntoIterator</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+    <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="ident">E</span>;
+    <span class="kw">type</span> <span class="ident">IntoIter</span> <span class="op">=</span> <span class="ident">Iter</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">into_iter</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Iter</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> { <span class="self">self</span>.<span class="ident">iter</span>() }
 }
 
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>test</span>)]</span>
-<span class='kw'>mod</span> <span class='ident'>tests</span> {
-    <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>Foo</span>::<span class='op'>*</span>;
-    <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>mem</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="kw">mod</span> <span class="ident">tests</span> {
+    <span class="kw">use</span> <span class="self">self</span>::<span class="ident">Foo</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">mem</span>;
 
-    <span class='kw'>use</span> <span class='ident'>super</span>::{<span class='ident'>EnumSet</span>, <span class='ident'>CLike</span>};
+    <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">EnumSet</span>, <span class="ident">CLike</span>};
 
-    <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Copy</span>, <span class='ident'>Clone</span>, <span class='ident'>PartialEq</span>, <span class='ident'>Debug</span>)]</span>
-    <span class='attribute'>#[<span class='ident'>repr</span>(<span class='ident'>u32</span>)]</span>
-    <span class='kw'>enum</span> <span class='ident'>Foo</span> {
-        <span class='ident'>A</span>, <span class='ident'>B</span>, <span class='ident'>C</span>
+    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Debug</span>)]</span>
+    <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">u32</span>)]</span>
+    <span class="kw">enum</span> <span class="ident">Foo</span> {
+        <span class="ident">A</span>, <span class="ident">B</span>, <span class="ident">C</span>
     }
 
-    <span class='kw'>impl</span> <span class='ident'>CLike</span> <span class='kw'>for</span> <span class='ident'>Foo</span> {
-        <span class='kw'>fn</span> <span class='ident'>to_u32</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>u32</span> {
-            <span class='op'>*</span><span class='self'>self</span> <span class='kw'>as</span> <span class='ident'>u32</span>
+    <span class="kw">impl</span> <span class="ident">CLike</span> <span class="kw">for</span> <span class="ident">Foo</span> {
+        <span class="kw">fn</span> <span class="ident">to_u32</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">u32</span> {
+            <span class="kw-2">*</span><span class="self">self</span> <span class="kw">as</span> <span class="ident">u32</span>
         }
 
-        <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>from_u32</span>(<span class='ident'>v</span>: <span class='ident'>u32</span>) <span class='op'>-&gt;</span> <span class='ident'>Foo</span> {
-            <span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='ident'>v</span>)
+        <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">from_u32</span>(<span class="ident">v</span>: <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="ident">Foo</span> {
+            <span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="ident">v</span>)
         }
     }
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_new</span>() {
-        <span class='kw'>let</span> <span class='ident'>e</span>: <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>Foo</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>EnumSet</span>::<span class='ident'>new</span>();
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>e</span>.<span class='ident'>is_empty</span>());
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_new</span>() {
+        <span class="kw">let</span> <span class="ident">e</span>: <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">Foo</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">EnumSet</span>::<span class="ident">new</span>();
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">e</span>.<span class="ident">is_empty</span>());
     }
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_debug</span>() {
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>e</span> <span class='op'>=</span> <span class='ident'>EnumSet</span>::<span class='ident'>new</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{:?}&quot;</span>, <span class='ident'>e</span>));
-        <span class='ident'>e</span>.<span class='ident'>insert</span>(<span class='ident'>A</span>);
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='string'>&quot;{A}&quot;</span>, <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{:?}&quot;</span>, <span class='ident'>e</span>));
-        <span class='ident'>e</span>.<span class='ident'>insert</span>(<span class='ident'>C</span>);
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='string'>&quot;{A, C}&quot;</span>, <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{:?}&quot;</span>, <span class='ident'>e</span>));
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_debug</span>() {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">e</span> <span class="op">=</span> <span class="ident">EnumSet</span>::<span class="ident">new</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">e</span>));
+        <span class="ident">e</span>.<span class="ident">insert</span>(<span class="ident">A</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="string">&quot;{A}&quot;</span>, <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">e</span>));
+        <span class="ident">e</span>.<span class="ident">insert</span>(<span class="ident">C</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="string">&quot;{A, C}&quot;</span>, <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">e</span>));
     }
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_len</span>() {
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>e</span> <span class='op'>=</span> <span class='ident'>EnumSet</span>::<span class='ident'>new</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>e</span>.<span class='ident'>len</span>(), <span class='number'>0</span>);
-        <span class='ident'>e</span>.<span class='ident'>insert</span>(<span class='ident'>A</span>);
-        <span class='ident'>e</span>.<span class='ident'>insert</span>(<span class='ident'>B</span>);
-        <span class='ident'>e</span>.<span class='ident'>insert</span>(<span class='ident'>C</span>);
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>e</span>.<span class='ident'>len</span>(), <span class='number'>3</span>);
-        <span class='ident'>e</span>.<span class='ident'>remove</span>(<span class='kw-2'>&amp;</span><span class='ident'>A</span>);
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>e</span>.<span class='ident'>len</span>(), <span class='number'>2</span>);
-        <span class='ident'>e</span>.<span class='ident'>clear</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>e</span>.<span class='ident'>len</span>(), <span class='number'>0</span>);
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_len</span>() {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">e</span> <span class="op">=</span> <span class="ident">EnumSet</span>::<span class="ident">new</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">e</span>.<span class="ident">len</span>(), <span class="number">0</span>);
+        <span class="ident">e</span>.<span class="ident">insert</span>(<span class="ident">A</span>);
+        <span class="ident">e</span>.<span class="ident">insert</span>(<span class="ident">B</span>);
+        <span class="ident">e</span>.<span class="ident">insert</span>(<span class="ident">C</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">e</span>.<span class="ident">len</span>(), <span class="number">3</span>);
+        <span class="ident">e</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">A</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">e</span>.<span class="ident">len</span>(), <span class="number">2</span>);
+        <span class="ident">e</span>.<span class="ident">clear</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">e</span>.<span class="ident">len</span>(), <span class="number">0</span>);
     }
 
-    <span class='comment'>///////////////////////////////////////////////////////////////////////////</span>
-    <span class='comment'>// intersect</span>
+    <span class="comment">///////////////////////////////////////////////////////////////////////////</span>
+    <span class="comment">// intersect</span>
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_two_empties_do_not_intersect</span>() {
-        <span class='kw'>let</span> <span class='ident'>e1</span>: <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>Foo</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>EnumSet</span>::<span class='ident'>new</span>();
-        <span class='kw'>let</span> <span class='ident'>e2</span>: <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>Foo</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>EnumSet</span>::<span class='ident'>new</span>();
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>e1</span>.<span class='ident'>is_disjoint</span>(<span class='kw-2'>&amp;</span><span class='ident'>e2</span>));
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_two_empties_do_not_intersect</span>() {
+        <span class="kw">let</span> <span class="ident">e1</span>: <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">Foo</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">EnumSet</span>::<span class="ident">new</span>();
+        <span class="kw">let</span> <span class="ident">e2</span>: <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">Foo</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">EnumSet</span>::<span class="ident">new</span>();
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">e1</span>.<span class="ident">is_disjoint</span>(<span class="kw-2">&amp;</span><span class="ident">e2</span>));
     }
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_empty_does_not_intersect_with_full</span>() {
-        <span class='kw'>let</span> <span class='ident'>e1</span>: <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>Foo</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>EnumSet</span>::<span class='ident'>new</span>();
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_empty_does_not_intersect_with_full</span>() {
+        <span class="kw">let</span> <span class="ident">e1</span>: <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">Foo</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">EnumSet</span>::<span class="ident">new</span>();
 
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>e2</span>: <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>Foo</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>EnumSet</span>::<span class='ident'>new</span>();
-        <span class='ident'>e2</span>.<span class='ident'>insert</span>(<span class='ident'>A</span>);
-        <span class='ident'>e2</span>.<span class='ident'>insert</span>(<span class='ident'>B</span>);
-        <span class='ident'>e2</span>.<span class='ident'>insert</span>(<span class='ident'>C</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">e2</span>: <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">Foo</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">EnumSet</span>::<span class="ident">new</span>();
+        <span class="ident">e2</span>.<span class="ident">insert</span>(<span class="ident">A</span>);
+        <span class="ident">e2</span>.<span class="ident">insert</span>(<span class="ident">B</span>);
+        <span class="ident">e2</span>.<span class="ident">insert</span>(<span class="ident">C</span>);
 
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>e1</span>.<span class='ident'>is_disjoint</span>(<span class='kw-2'>&amp;</span><span class='ident'>e2</span>));
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">e1</span>.<span class="ident">is_disjoint</span>(<span class="kw-2">&amp;</span><span class="ident">e2</span>));
     }
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_disjoint_intersects</span>() {
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>e1</span>: <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>Foo</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>EnumSet</span>::<span class='ident'>new</span>();
-        <span class='ident'>e1</span>.<span class='ident'>insert</span>(<span class='ident'>A</span>);
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_disjoint_intersects</span>() {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">e1</span>: <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">Foo</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">EnumSet</span>::<span class="ident">new</span>();
+        <span class="ident">e1</span>.<span class="ident">insert</span>(<span class="ident">A</span>);
 
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>e2</span>: <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>Foo</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>EnumSet</span>::<span class='ident'>new</span>();
-        <span class='ident'>e2</span>.<span class='ident'>insert</span>(<span class='ident'>B</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">e2</span>: <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">Foo</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">EnumSet</span>::<span class="ident">new</span>();
+        <span class="ident">e2</span>.<span class="ident">insert</span>(<span class="ident">B</span>);
 
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>e1</span>.<span class='ident'>is_disjoint</span>(<span class='kw-2'>&amp;</span><span class='ident'>e2</span>));
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">e1</span>.<span class="ident">is_disjoint</span>(<span class="kw-2">&amp;</span><span class="ident">e2</span>));
     }
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_overlapping_intersects</span>() {
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>e1</span>: <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>Foo</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>EnumSet</span>::<span class='ident'>new</span>();
-        <span class='ident'>e1</span>.<span class='ident'>insert</span>(<span class='ident'>A</span>);
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_overlapping_intersects</span>() {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">e1</span>: <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">Foo</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">EnumSet</span>::<span class="ident">new</span>();
+        <span class="ident">e1</span>.<span class="ident">insert</span>(<span class="ident">A</span>);
 
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>e2</span>: <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>Foo</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>EnumSet</span>::<span class='ident'>new</span>();
-        <span class='ident'>e2</span>.<span class='ident'>insert</span>(<span class='ident'>A</span>);
-        <span class='ident'>e2</span>.<span class='ident'>insert</span>(<span class='ident'>B</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">e2</span>: <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">Foo</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">EnumSet</span>::<span class="ident">new</span>();
+        <span class="ident">e2</span>.<span class="ident">insert</span>(<span class="ident">A</span>);
+        <span class="ident">e2</span>.<span class="ident">insert</span>(<span class="ident">B</span>);
 
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='op'>!</span><span class='ident'>e1</span>.<span class='ident'>is_disjoint</span>(<span class='kw-2'>&amp;</span><span class='ident'>e2</span>));
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">e1</span>.<span class="ident">is_disjoint</span>(<span class="kw-2">&amp;</span><span class="ident">e2</span>));
     }
 
-    <span class='comment'>///////////////////////////////////////////////////////////////////////////</span>
-    <span class='comment'>// contains and contains_elem</span>
+    <span class="comment">///////////////////////////////////////////////////////////////////////////</span>
+    <span class="comment">// contains and contains_elem</span>
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_superset</span>() {
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>e1</span>: <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>Foo</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>EnumSet</span>::<span class='ident'>new</span>();
-        <span class='ident'>e1</span>.<span class='ident'>insert</span>(<span class='ident'>A</span>);
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_superset</span>() {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">e1</span>: <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">Foo</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">EnumSet</span>::<span class="ident">new</span>();
+        <span class="ident">e1</span>.<span class="ident">insert</span>(<span class="ident">A</span>);
 
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>e2</span>: <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>Foo</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>EnumSet</span>::<span class='ident'>new</span>();
-        <span class='ident'>e2</span>.<span class='ident'>insert</span>(<span class='ident'>A</span>);
-        <span class='ident'>e2</span>.<span class='ident'>insert</span>(<span class='ident'>B</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">e2</span>: <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">Foo</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">EnumSet</span>::<span class="ident">new</span>();
+        <span class="ident">e2</span>.<span class="ident">insert</span>(<span class="ident">A</span>);
+        <span class="ident">e2</span>.<span class="ident">insert</span>(<span class="ident">B</span>);
 
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>e3</span>: <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>Foo</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>EnumSet</span>::<span class='ident'>new</span>();
-        <span class='ident'>e3</span>.<span class='ident'>insert</span>(<span class='ident'>C</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">e3</span>: <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">Foo</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">EnumSet</span>::<span class="ident">new</span>();
+        <span class="ident">e3</span>.<span class="ident">insert</span>(<span class="ident">C</span>);
 
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>e1</span>.<span class='ident'>is_subset</span>(<span class='kw-2'>&amp;</span><span class='ident'>e2</span>));
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>e2</span>.<span class='ident'>is_superset</span>(<span class='kw-2'>&amp;</span><span class='ident'>e1</span>));
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='op'>!</span><span class='ident'>e3</span>.<span class='ident'>is_superset</span>(<span class='kw-2'>&amp;</span><span class='ident'>e2</span>));
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='op'>!</span><span class='ident'>e2</span>.<span class='ident'>is_superset</span>(<span class='kw-2'>&amp;</span><span class='ident'>e3</span>));
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">e1</span>.<span class="ident">is_subset</span>(<span class="kw-2">&amp;</span><span class="ident">e2</span>));
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">e2</span>.<span class="ident">is_superset</span>(<span class="kw-2">&amp;</span><span class="ident">e1</span>));
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">e3</span>.<span class="ident">is_superset</span>(<span class="kw-2">&amp;</span><span class="ident">e2</span>));
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">e2</span>.<span class="ident">is_superset</span>(<span class="kw-2">&amp;</span><span class="ident">e3</span>));
     }
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_contains</span>() {
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>e1</span>: <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>Foo</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>EnumSet</span>::<span class='ident'>new</span>();
-        <span class='ident'>e1</span>.<span class='ident'>insert</span>(<span class='ident'>A</span>);
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>e1</span>.<span class='ident'>contains</span>(<span class='kw-2'>&amp;</span><span class='ident'>A</span>));
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='op'>!</span><span class='ident'>e1</span>.<span class='ident'>contains</span>(<span class='kw-2'>&amp;</span><span class='ident'>B</span>));
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='op'>!</span><span class='ident'>e1</span>.<span class='ident'>contains</span>(<span class='kw-2'>&amp;</span><span class='ident'>C</span>));
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_contains</span>() {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">e1</span>: <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">Foo</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">EnumSet</span>::<span class="ident">new</span>();
+        <span class="ident">e1</span>.<span class="ident">insert</span>(<span class="ident">A</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">e1</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">A</span>));
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">e1</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">B</span>));
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">e1</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">C</span>));
 
-        <span class='ident'>e1</span>.<span class='ident'>insert</span>(<span class='ident'>A</span>);
-        <span class='ident'>e1</span>.<span class='ident'>insert</span>(<span class='ident'>B</span>);
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>e1</span>.<span class='ident'>contains</span>(<span class='kw-2'>&amp;</span><span class='ident'>A</span>));
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>e1</span>.<span class='ident'>contains</span>(<span class='kw-2'>&amp;</span><span class='ident'>B</span>));
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='op'>!</span><span class='ident'>e1</span>.<span class='ident'>contains</span>(<span class='kw-2'>&amp;</span><span class='ident'>C</span>));
+        <span class="ident">e1</span>.<span class="ident">insert</span>(<span class="ident">A</span>);
+        <span class="ident">e1</span>.<span class="ident">insert</span>(<span class="ident">B</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">e1</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">A</span>));
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">e1</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">B</span>));
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">e1</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">C</span>));
     }
 
-    <span class='comment'>///////////////////////////////////////////////////////////////////////////</span>
-    <span class='comment'>// iter</span>
+    <span class="comment">///////////////////////////////////////////////////////////////////////////</span>
+    <span class="comment">// iter</span>
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_iterator</span>() {
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>e1</span>: <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>Foo</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>EnumSet</span>::<span class='ident'>new</span>();
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_iterator</span>() {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">e1</span>: <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">Foo</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">EnumSet</span>::<span class="ident">new</span>();
 
-        <span class='kw'>let</span> <span class='ident'>elems</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>Foo</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>e1</span>.<span class='ident'>iter</span>().<span class='ident'>collect</span>();
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>elems</span>.<span class='ident'>is_empty</span>());
+        <span class="kw">let</span> <span class="ident">elems</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Foo</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">e1</span>.<span class="ident">iter</span>().<span class="ident">collect</span>();
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">elems</span>.<span class="ident">is_empty</span>());
 
-        <span class='ident'>e1</span>.<span class='ident'>insert</span>(<span class='ident'>A</span>);
-        <span class='kw'>let</span> <span class='ident'>elems</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span>_<span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>e1</span>.<span class='ident'>iter</span>().<span class='ident'>collect</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>A</span>], <span class='ident'>elems</span>);
+        <span class="ident">e1</span>.<span class="ident">insert</span>(<span class="ident">A</span>);
+        <span class="kw">let</span> <span class="ident">elems</span>: <span class="ident">Vec</span><span class="op">&lt;</span>_<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">e1</span>.<span class="ident">iter</span>().<span class="ident">collect</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">A</span>], <span class="ident">elems</span>);
 
-        <span class='ident'>e1</span>.<span class='ident'>insert</span>(<span class='ident'>C</span>);
-        <span class='kw'>let</span> <span class='ident'>elems</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span>_<span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>e1</span>.<span class='ident'>iter</span>().<span class='ident'>collect</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>A</span>,<span class='ident'>C</span>], <span class='ident'>elems</span>);
+        <span class="ident">e1</span>.<span class="ident">insert</span>(<span class="ident">C</span>);
+        <span class="kw">let</span> <span class="ident">elems</span>: <span class="ident">Vec</span><span class="op">&lt;</span>_<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">e1</span>.<span class="ident">iter</span>().<span class="ident">collect</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">A</span>,<span class="ident">C</span>], <span class="ident">elems</span>);
 
-        <span class='ident'>e1</span>.<span class='ident'>insert</span>(<span class='ident'>C</span>);
-        <span class='kw'>let</span> <span class='ident'>elems</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span>_<span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>e1</span>.<span class='ident'>iter</span>().<span class='ident'>collect</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>A</span>,<span class='ident'>C</span>], <span class='ident'>elems</span>);
+        <span class="ident">e1</span>.<span class="ident">insert</span>(<span class="ident">C</span>);
+        <span class="kw">let</span> <span class="ident">elems</span>: <span class="ident">Vec</span><span class="op">&lt;</span>_<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">e1</span>.<span class="ident">iter</span>().<span class="ident">collect</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">A</span>,<span class="ident">C</span>], <span class="ident">elems</span>);
 
-        <span class='ident'>e1</span>.<span class='ident'>insert</span>(<span class='ident'>B</span>);
-        <span class='kw'>let</span> <span class='ident'>elems</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span>_<span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>e1</span>.<span class='ident'>iter</span>().<span class='ident'>collect</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>A</span>,<span class='ident'>B</span>,<span class='ident'>C</span>], <span class='ident'>elems</span>);
+        <span class="ident">e1</span>.<span class="ident">insert</span>(<span class="ident">B</span>);
+        <span class="kw">let</span> <span class="ident">elems</span>: <span class="ident">Vec</span><span class="op">&lt;</span>_<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">e1</span>.<span class="ident">iter</span>().<span class="ident">collect</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">A</span>,<span class="ident">B</span>,<span class="ident">C</span>], <span class="ident">elems</span>);
     }
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_clone_iterator</span>() {
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>e</span>: <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>Foo</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>EnumSet</span>::<span class='ident'>new</span>();
-        <span class='ident'>e</span>.<span class='ident'>insert</span>(<span class='ident'>A</span>);
-        <span class='ident'>e</span>.<span class='ident'>insert</span>(<span class='ident'>B</span>);
-        <span class='ident'>e</span>.<span class='ident'>insert</span>(<span class='ident'>C</span>);
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_clone_iterator</span>() {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">e</span>: <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">Foo</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">EnumSet</span>::<span class="ident">new</span>();
+        <span class="ident">e</span>.<span class="ident">insert</span>(<span class="ident">A</span>);
+        <span class="ident">e</span>.<span class="ident">insert</span>(<span class="ident">B</span>);
+        <span class="ident">e</span>.<span class="ident">insert</span>(<span class="ident">C</span>);
 
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>iter1</span> <span class='op'>=</span> <span class='ident'>e</span>.<span class='ident'>iter</span>();
-        <span class='kw'>let</span> <span class='ident'>first_elem</span> <span class='op'>=</span> <span class='ident'>iter1</span>.<span class='ident'>next</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='prelude-val'>Some</span>(<span class='ident'>A</span>), <span class='ident'>first_elem</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">iter1</span> <span class="op">=</span> <span class="ident">e</span>.<span class="ident">iter</span>();
+        <span class="kw">let</span> <span class="ident">first_elem</span> <span class="op">=</span> <span class="ident">iter1</span>.<span class="ident">next</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="prelude-val">Some</span>(<span class="ident">A</span>), <span class="ident">first_elem</span>);
 
-        <span class='kw'>let</span> <span class='ident'>iter2</span> <span class='op'>=</span> <span class='ident'>iter1</span>.<span class='ident'>clone</span>();
-        <span class='kw'>let</span> <span class='ident'>elems1</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span>_<span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>iter1</span>.<span class='ident'>collect</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>B</span>, <span class='ident'>C</span>], <span class='ident'>elems1</span>);
+        <span class="kw">let</span> <span class="ident">iter2</span> <span class="op">=</span> <span class="ident">iter1</span>.<span class="ident">clone</span>();
+        <span class="kw">let</span> <span class="ident">elems1</span>: <span class="ident">Vec</span><span class="op">&lt;</span>_<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">iter1</span>.<span class="ident">collect</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">B</span>, <span class="ident">C</span>], <span class="ident">elems1</span>);
 
-        <span class='kw'>let</span> <span class='ident'>elems2</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span>_<span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>iter2</span>.<span class='ident'>collect</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>B</span>, <span class='ident'>C</span>], <span class='ident'>elems2</span>);
+        <span class="kw">let</span> <span class="ident">elems2</span>: <span class="ident">Vec</span><span class="op">&lt;</span>_<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">iter2</span>.<span class="ident">collect</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">B</span>, <span class="ident">C</span>], <span class="ident">elems2</span>);
     }
 
-    <span class='comment'>///////////////////////////////////////////////////////////////////////////</span>
-    <span class='comment'>// operators</span>
+    <span class="comment">///////////////////////////////////////////////////////////////////////////</span>
+    <span class="comment">// operators</span>
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_operators</span>() {
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>e1</span>: <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>Foo</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>EnumSet</span>::<span class='ident'>new</span>();
-        <span class='ident'>e1</span>.<span class='ident'>insert</span>(<span class='ident'>A</span>);
-        <span class='ident'>e1</span>.<span class='ident'>insert</span>(<span class='ident'>C</span>);
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_operators</span>() {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">e1</span>: <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">Foo</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">EnumSet</span>::<span class="ident">new</span>();
+        <span class="ident">e1</span>.<span class="ident">insert</span>(<span class="ident">A</span>);
+        <span class="ident">e1</span>.<span class="ident">insert</span>(<span class="ident">C</span>);
 
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>e2</span>: <span class='ident'>EnumSet</span><span class='op'>&lt;</span><span class='ident'>Foo</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>EnumSet</span>::<span class='ident'>new</span>();
-        <span class='ident'>e2</span>.<span class='ident'>insert</span>(<span class='ident'>B</span>);
-        <span class='ident'>e2</span>.<span class='ident'>insert</span>(<span class='ident'>C</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">e2</span>: <span class="ident">EnumSet</span><span class="op">&lt;</span><span class="ident">Foo</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">EnumSet</span>::<span class="ident">new</span>();
+        <span class="ident">e2</span>.<span class="ident">insert</span>(<span class="ident">B</span>);
+        <span class="ident">e2</span>.<span class="ident">insert</span>(<span class="ident">C</span>);
 
-        <span class='kw'>let</span> <span class='ident'>e_union</span> <span class='op'>=</span> <span class='ident'>e1</span> <span class='op'>|</span> <span class='ident'>e2</span>;
-        <span class='kw'>let</span> <span class='ident'>elems</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span>_<span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>e_union</span>.<span class='ident'>iter</span>().<span class='ident'>collect</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>A</span>,<span class='ident'>B</span>,<span class='ident'>C</span>], <span class='ident'>elems</span>);
+        <span class="kw">let</span> <span class="ident">e_union</span> <span class="op">=</span> <span class="ident">e1</span> <span class="op">|</span> <span class="ident">e2</span>;
+        <span class="kw">let</span> <span class="ident">elems</span>: <span class="ident">Vec</span><span class="op">&lt;</span>_<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">e_union</span>.<span class="ident">iter</span>().<span class="ident">collect</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">A</span>,<span class="ident">B</span>,<span class="ident">C</span>], <span class="ident">elems</span>);
 
-        <span class='kw'>let</span> <span class='ident'>e_intersection</span> <span class='op'>=</span> <span class='ident'>e1</span> <span class='kw-2'>&amp;</span> <span class='ident'>e2</span>;
-        <span class='kw'>let</span> <span class='ident'>elems</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span>_<span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>e_intersection</span>.<span class='ident'>iter</span>().<span class='ident'>collect</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>C</span>], <span class='ident'>elems</span>);
+        <span class="kw">let</span> <span class="ident">e_intersection</span> <span class="op">=</span> <span class="ident">e1</span> <span class="op">&amp;</span> <span class="ident">e2</span>;
+        <span class="kw">let</span> <span class="ident">elems</span>: <span class="ident">Vec</span><span class="op">&lt;</span>_<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">e_intersection</span>.<span class="ident">iter</span>().<span class="ident">collect</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">C</span>], <span class="ident">elems</span>);
 
-        <span class='comment'>// Another way to express intersection</span>
-        <span class='kw'>let</span> <span class='ident'>e_intersection</span> <span class='op'>=</span> <span class='ident'>e1</span> <span class='op'>-</span> (<span class='ident'>e1</span> <span class='op'>-</span> <span class='ident'>e2</span>);
-        <span class='kw'>let</span> <span class='ident'>elems</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span>_<span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>e_intersection</span>.<span class='ident'>iter</span>().<span class='ident'>collect</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>C</span>], <span class='ident'>elems</span>);
+        <span class="comment">// Another way to express intersection</span>
+        <span class="kw">let</span> <span class="ident">e_intersection</span> <span class="op">=</span> <span class="ident">e1</span> <span class="op">-</span> (<span class="ident">e1</span> <span class="op">-</span> <span class="ident">e2</span>);
+        <span class="kw">let</span> <span class="ident">elems</span>: <span class="ident">Vec</span><span class="op">&lt;</span>_<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">e_intersection</span>.<span class="ident">iter</span>().<span class="ident">collect</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">C</span>], <span class="ident">elems</span>);
 
-        <span class='kw'>let</span> <span class='ident'>e_subtract</span> <span class='op'>=</span> <span class='ident'>e1</span> <span class='op'>-</span> <span class='ident'>e2</span>;
-        <span class='kw'>let</span> <span class='ident'>elems</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span>_<span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>e_subtract</span>.<span class='ident'>iter</span>().<span class='ident'>collect</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>A</span>], <span class='ident'>elems</span>);
+        <span class="kw">let</span> <span class="ident">e_subtract</span> <span class="op">=</span> <span class="ident">e1</span> <span class="op">-</span> <span class="ident">e2</span>;
+        <span class="kw">let</span> <span class="ident">elems</span>: <span class="ident">Vec</span><span class="op">&lt;</span>_<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">e_subtract</span>.<span class="ident">iter</span>().<span class="ident">collect</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">A</span>], <span class="ident">elems</span>);
 
-        <span class='comment'>// Bitwise XOR of two sets, aka symmetric difference</span>
-        <span class='kw'>let</span> <span class='ident'>e_symmetric_diff</span> <span class='op'>=</span> <span class='ident'>e1</span> <span class='op'>^</span> <span class='ident'>e2</span>;
-        <span class='kw'>let</span> <span class='ident'>elems</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span>_<span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>e_symmetric_diff</span>.<span class='ident'>iter</span>().<span class='ident'>collect</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>A</span>,<span class='ident'>B</span>], <span class='ident'>elems</span>);
+        <span class="comment">// Bitwise XOR of two sets, aka symmetric difference</span>
+        <span class="kw">let</span> <span class="ident">e_symmetric_diff</span> <span class="op">=</span> <span class="ident">e1</span> <span class="op">^</span> <span class="ident">e2</span>;
+        <span class="kw">let</span> <span class="ident">elems</span>: <span class="ident">Vec</span><span class="op">&lt;</span>_<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">e_symmetric_diff</span>.<span class="ident">iter</span>().<span class="ident">collect</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">A</span>,<span class="ident">B</span>], <span class="ident">elems</span>);
 
-        <span class='comment'>// Another way to express symmetric difference</span>
-        <span class='kw'>let</span> <span class='ident'>e_symmetric_diff</span> <span class='op'>=</span> (<span class='ident'>e1</span> <span class='op'>-</span> <span class='ident'>e2</span>) <span class='op'>|</span> (<span class='ident'>e2</span> <span class='op'>-</span> <span class='ident'>e1</span>);
-        <span class='kw'>let</span> <span class='ident'>elems</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span>_<span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>e_symmetric_diff</span>.<span class='ident'>iter</span>().<span class='ident'>collect</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>A</span>,<span class='ident'>B</span>], <span class='ident'>elems</span>);
+        <span class="comment">// Another way to express symmetric difference</span>
+        <span class="kw">let</span> <span class="ident">e_symmetric_diff</span> <span class="op">=</span> (<span class="ident">e1</span> <span class="op">-</span> <span class="ident">e2</span>) <span class="op">|</span> (<span class="ident">e2</span> <span class="op">-</span> <span class="ident">e1</span>);
+        <span class="kw">let</span> <span class="ident">elems</span>: <span class="ident">Vec</span><span class="op">&lt;</span>_<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">e_symmetric_diff</span>.<span class="ident">iter</span>().<span class="ident">collect</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">A</span>,<span class="ident">B</span>], <span class="ident">elems</span>);
 
-        <span class='comment'>// Yet another way to express symmetric difference</span>
-        <span class='kw'>let</span> <span class='ident'>e_symmetric_diff</span> <span class='op'>=</span> (<span class='ident'>e1</span> <span class='op'>|</span> <span class='ident'>e2</span>) <span class='op'>-</span> (<span class='ident'>e1</span> <span class='kw-2'>&amp;</span> <span class='ident'>e2</span>);
-        <span class='kw'>let</span> <span class='ident'>elems</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span>_<span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>e_symmetric_diff</span>.<span class='ident'>iter</span>().<span class='ident'>collect</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>A</span>,<span class='ident'>B</span>], <span class='ident'>elems</span>);
+        <span class="comment">// Yet another way to express symmetric difference</span>
+        <span class="kw">let</span> <span class="ident">e_symmetric_diff</span> <span class="op">=</span> (<span class="ident">e1</span> <span class="op">|</span> <span class="ident">e2</span>) <span class="op">-</span> (<span class="ident">e1</span> <span class="op">&amp;</span> <span class="ident">e2</span>);
+        <span class="kw">let</span> <span class="ident">elems</span>: <span class="ident">Vec</span><span class="op">&lt;</span>_<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">e_symmetric_diff</span>.<span class="ident">iter</span>().<span class="ident">collect</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">A</span>,<span class="ident">B</span>], <span class="ident">elems</span>);
     }
 
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='attribute'>#[<span class='ident'>should_panic</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>test_overflow</span>() {
-        <span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>dead_code</span>)]</span>
-        <span class='attribute'>#[<span class='ident'>repr</span>(<span class='ident'>u32</span>)]</span>
-        <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Clone</span>, <span class='ident'>Copy</span>)]</span>
-        <span class='kw'>enum</span> <span class='ident'>Bar</span> {
-            <span class='ident'>V00</span>, <span class='ident'>V01</span>, <span class='ident'>V02</span>, <span class='ident'>V03</span>, <span class='ident'>V04</span>, <span class='ident'>V05</span>, <span class='ident'>V06</span>, <span class='ident'>V07</span>, <span class='ident'>V08</span>, <span class='ident'>V09</span>,
-            <span class='ident'>V10</span>, <span class='ident'>V11</span>, <span class='ident'>V12</span>, <span class='ident'>V13</span>, <span class='ident'>V14</span>, <span class='ident'>V15</span>, <span class='ident'>V16</span>, <span class='ident'>V17</span>, <span class='ident'>V18</span>, <span class='ident'>V19</span>,
-            <span class='ident'>V20</span>, <span class='ident'>V21</span>, <span class='ident'>V22</span>, <span class='ident'>V23</span>, <span class='ident'>V24</span>, <span class='ident'>V25</span>, <span class='ident'>V26</span>, <span class='ident'>V27</span>, <span class='ident'>V28</span>, <span class='ident'>V29</span>,
-            <span class='ident'>V30</span>, <span class='ident'>V31</span>, <span class='ident'>V32</span>, <span class='ident'>V33</span>, <span class='ident'>V34</span>, <span class='ident'>V35</span>, <span class='ident'>V36</span>, <span class='ident'>V37</span>, <span class='ident'>V38</span>, <span class='ident'>V39</span>,
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="attribute">#[<span class="ident">should_panic</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_overflow</span>() {
+        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
+        <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">u32</span>)]</span>
+        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>)]</span>
+        <span class="kw">enum</span> <span class="ident">Bar</span> {
+            <span class="ident">V00</span>, <span class="ident">V01</span>, <span class="ident">V02</span>, <span class="ident">V03</span>, <span class="ident">V04</span>, <span class="ident">V05</span>, <span class="ident">V06</span>, <span class="ident">V07</span>, <span class="ident">V08</span>, <span class="ident">V09</span>,
+            <span class="ident">V10</span>, <span class="ident">V11</span>, <span class="ident">V12</span>, <span class="ident">V13</span>, <span class="ident">V14</span>, <span class="ident">V15</span>, <span class="ident">V16</span>, <span class="ident">V17</span>, <span class="ident">V18</span>, <span class="ident">V19</span>,
+            <span class="ident">V20</span>, <span class="ident">V21</span>, <span class="ident">V22</span>, <span class="ident">V23</span>, <span class="ident">V24</span>, <span class="ident">V25</span>, <span class="ident">V26</span>, <span class="ident">V27</span>, <span class="ident">V28</span>, <span class="ident">V29</span>,
+            <span class="ident">V30</span>, <span class="ident">V31</span>, <span class="ident">V32</span>, <span class="ident">V33</span>, <span class="ident">V34</span>, <span class="ident">V35</span>, <span class="ident">V36</span>, <span class="ident">V37</span>, <span class="ident">V38</span>, <span class="ident">V39</span>,
         }
 
-        <span class='kw'>impl</span> <span class='ident'>CLike</span> <span class='kw'>for</span> <span class='ident'>Bar</span> {
-            <span class='kw'>fn</span> <span class='ident'>to_u32</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>u32</span> {
-                <span class='op'>*</span><span class='self'>self</span> <span class='kw'>as</span> <span class='ident'>u32</span>
+        <span class="kw">impl</span> <span class="ident">CLike</span> <span class="kw">for</span> <span class="ident">Bar</span> {
+            <span class="kw">fn</span> <span class="ident">to_u32</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">u32</span> {
+                <span class="kw-2">*</span><span class="self">self</span> <span class="kw">as</span> <span class="ident">u32</span>
             }
 
-            <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>from_u32</span>(<span class='ident'>v</span>: <span class='ident'>u32</span>) <span class='op'>-&gt;</span> <span class='ident'>Bar</span> {
-                <span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='ident'>v</span>)
+            <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">from_u32</span>(<span class="ident">v</span>: <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="ident">Bar</span> {
+                <span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="ident">v</span>)
             }
         }
 
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>set</span> <span class='op'>=</span> <span class='ident'>EnumSet</span>::<span class='ident'>new</span>();
-        <span class='ident'>set</span>.<span class='ident'>insert</span>(<span class='ident'>Bar</span>::<span class='ident'>V32</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">set</span> <span class="op">=</span> <span class="ident">EnumSet</span>::<span class="ident">new</span>();
+        <span class="ident">set</span>.<span class="ident">insert</span>(<span class="ident">Bar</span>::<span class="ident">V32</span>);
     }
 }
 </pre>
@@ -1108,6 +1116,8 @@
                     <dd>Move down in search results</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
 
@@ -1128,7 +1138,7 @@
 
                 <p>
                     Search functions by type signature (e.g.
-                    <code>vec -> usize</code>)
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
                 </p>
             </div>
         </div>
@@ -1139,11 +1149,9 @@
     <script>
         window.rootPath = "../../";
         window.currentCrate = "enum_set";
-        window.playgroundUrl = "";
     </script>
     <script src="../../jquery.js"></script>
     <script src="../../main.js"></script>
-    
     <script defer src="../../search-index.js"></script>
 </body>
 </html>
