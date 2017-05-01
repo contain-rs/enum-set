@@ -25,7 +25,7 @@ pub struct EnumSet<E> {
     // We must maintain the invariant that no bits are set
     // for which no variant exists
     bits: u32,
-    phantom: PhantomData<*mut E>,
+    phantom: PhantomData<E>,
 }
 
 impl<E: CLike + fmt::Debug> fmt::Debug for EnumSet<E> {
@@ -40,8 +40,11 @@ impl<E: CLike> hash::Hash for EnumSet<E> {
     }
 }
 
-/// An interface for casting C-like enum to u32 and back. A typical
-/// implementation can be seen below:
+/// An interface for casting C-like enum to `u32` and back.
+///
+/// The returned value must be no more than 31: `EnumSet` does not support more cases than this.
+///
+/// A typical implementation can be seen below:
 ///
 /// ```
 /// use enum_set::CLike;
@@ -64,7 +67,7 @@ impl<E: CLike> hash::Hash for EnumSet<E> {
 /// }
 /// ```
 pub trait CLike {
-    /// Converts a C-like enum to a `u32`.
+    /// Converts a C-like enum to a `u32`. The value must be `<= 31`.
     fn to_u32(&self) -> u32;
 
     /// Converts a `u32` to a C-like enum. This method only needs to be safe
