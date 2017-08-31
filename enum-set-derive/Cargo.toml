@@ -1,11 +1,11 @@
 [package]
 
-name = "enum-set"
-version = "0.0.7"
+name = "enum-set-derive"
+version = "0.1.0"
 license = "MIT/Apache-2.0"
-description = "A structure for holding a set of enum variants"
+description = "Macros 1.1 implementation of #[derive(EnumMap)]"
 authors = [
-    "Stepan Koltsov <stepan.koltsov@gmail.com>",
+    "Konrad Borowski <konrad@borowski.pw>"
 ]
 
 repository = "https://github.com/contain-rs/enum-set"
@@ -14,8 +14,9 @@ documentation = "https://contain-rs.github.io/enum-set/enum_set"
 keywords = ["data-structures"]
 readme = "README.md"
 
-[dev-dependencies]
-enum-set-derive = { version = "0.1.0", path = "enum-set-derive" }
+[lib]
+proc-macro = true
 
-[workspace]
-members = ["enum-set-derive"]
+[dependencies]
+syn = "0.11.11"
+quote = "0.3.15"
