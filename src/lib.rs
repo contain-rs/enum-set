@@ -204,6 +204,30 @@ impl<E: CLike> ops::BitXor for EnumSet<E> {
     }
 }
 
+impl<E: CLike> ops::SubAssign for EnumSet<E> {
+    fn sub_assign(&mut self, other: Self) {
+        self.bits &= !other.bits;
+    }
+}
+
+impl<E: CLike> ops::BitOrAssign for EnumSet<E> {
+    fn bitor_assign(&mut self, other: Self) {
+        self.bits |= other.bits;
+    }
+}
+
+impl<E: CLike> ops::BitAndAssign for EnumSet<E> {
+    fn bitand_assign(&mut self, other: Self) {
+        self.bits &= other.bits;
+    }
+}
+
+impl<E: CLike> ops::BitXorAssign for EnumSet<E> {
+    fn bitxor_assign(&mut self, other: Self) {
+        self.bits ^= other.bits;
+    }
+}
+
 #[derive(Clone)]
 /// An iterator over an `EnumSet`.
 pub struct Iter<E> {
@@ -491,6 +515,38 @@ mod tests {
 
         // Yet another way to express symmetric difference
         let e_symmetric_diff = (e1 | e2) - (e1 & e2);
+        let elems: Vec<_> = e_symmetric_diff.iter().collect();
+        assert_eq!(vec![A,B], elems);
+    }
+
+    #[test]
+    fn test_assign_operators() {
+        let mut e1: EnumSet<Foo> = EnumSet::new();
+        e1.insert(A);
+        e1.insert(C);
+
+        let mut e2: EnumSet<Foo> = EnumSet::new();
+        e2.insert(B);
+        e2.insert(C);
+
+        let mut e_union = e1.clone();
+        e_union |= e2;
+        let elems: Vec<_> = e_union.iter().collect();
+        assert_eq!(vec![A,B,C], elems);
+
+        let mut e_intersection = e1.clone();
+        e_intersection &= e2;
+        let elems: Vec<_> = e_intersection.iter().collect();
+        assert_eq!(vec![C], elems);
+
+        let mut e_subtract = e1.clone();
+        e_subtract -= e2;
+        let elems: Vec<_> = e_subtract.iter().collect();
+        assert_eq!(vec![A], elems);
+
+        // Bitwise XOR of two sets, aka symmetric difference
+        let mut e_symmetric_diff = e1.clone();
+        e_symmetric_diff ^= e2;
         let elems: Vec<_> = e_symmetric_diff.iter().collect();
         assert_eq!(vec![A,B], elems);
     }
