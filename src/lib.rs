@@ -293,6 +293,15 @@ impl<'a, E: CLike> IntoIterator for &'a EnumSet<E> {
     fn into_iter(self) -> Iter<E> { self.iter() }
 }
 
+#[macro_export]
+macro_rules! enum_set {
+    ($($x:expr),*) => ({
+        let mut ret = EnumSet::new();
+        $(ret.insert($x);)*
+        ret
+    });
+}
+
 #[cfg(test)]
 mod tests {
     use self::Foo::*;
@@ -576,5 +585,18 @@ mod tests {
 
         let mut set = EnumSet::new();
         set.insert(Bar::V32);
+    }
+
+    #[test]
+    fn test_macro() {
+        let mut e1: EnumSet<Foo> = EnumSet::new();
+        e1.insert(A);
+        e1.insert(B);
+        let e2: EnumSet<Foo> = enum_set!(A, B);
+        assert_eq!(e1, e2);
+
+        let e1: EnumSet<Foo> = EnumSet::new();
+        let e2: EnumSet<Foo> = enum_set!();
+        assert_eq!(e1, e2);
     }
 }
